@@ -1,8 +1,10 @@
+import 'package:el_etehad/fetures/category/view/category_News.dart';
 import 'package:el_etehad/fetures/home/view/widgets/animated_artical_card.dart';
 import 'package:el_etehad/fetures/home/view/widgets/animated_breaking_news_card.dart';
 import 'package:el_etehad/fetures/home/view/widgets/animated_category_card.dart';
 import 'package:el_etehad/fetures/home/view/widgets/animated_video_card.dart';
 import 'package:el_etehad/fetures/home/view/widgets/section_title.dart';
+import 'package:el_etehad/fetures/news/view/new_details.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'dart:ui';
@@ -19,6 +21,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late AnimationController _logoController;
   late AnimationController _pulseController;
+  // ignore: unused_field
   late Animation<double> _headerAnimation;
   late Animation<double> _fadeAnimation;
   late Animation<double> _logoScale;
@@ -346,7 +349,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
             title: 'خبر عاجل ${index + 1}',
             time: '${index + 1}د',
             onTap: () {
-              // Handle tap
+              Navigator.of(
+                context,
+                rootNavigator: true,
+              ).push(MaterialPageRoute(builder: (context) => NewDetails()));
             },
           );
         },
@@ -432,7 +438,14 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
           icon: categories[index]['icon'] as IconData,
           color: categories[index]['color'] as Color,
           onTap: () {
-            // Handle tap
+            Navigator.of(context, rootNavigator: true).push(
+              MaterialPageRoute(
+                builder:
+                    (context) => CategoryNews(
+                      categoryName: categories[index]['name'] as String,
+                    ),
+              ),
+            );
           },
         );
       },
