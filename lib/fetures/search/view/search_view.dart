@@ -14,13 +14,18 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
 
   final List<String> categories = [
     'الكل',
+    'الرئيسية',
     'سياسة',
     'رياضة',
-    'تقنية',
+    'عالمي',
+    'فن',
+    'منوعات',
+    'انفوجرافيك',
+    'حوادث',
     'اقتصاد',
+    'تكنولوجيا',
     'صحة',
     'ثقافة',
-    'فن',
   ];
 
   final Map<String, List<Map<String, dynamic>>> newsData = {
@@ -30,7 +35,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
         'source': 'العربية',
         'time': 'منذ ساعتين',
         'image': '💻',
-        'category': 'تقنية',
+        'category': 'تكنولوجيا',
       },
       {
         'title': 'ارتفاع أسعار النفط لأعلى مستوى هذا العام',
@@ -79,20 +84,20 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
         'category': 'رياضة',
       },
     ],
-    'تقنية': [
+    'تكنولوجيا': [
       {
         'title': 'إطلاق هاتف ذكي جديد بمواصفات متطورة',
         'source': 'تك كرانش عربي',
         'time': 'منذ ساعتين',
         'image': '📱',
-        'category': 'تقنية',
+        'category': 'تكنولوجيا',
       },
       {
         'title': 'شركة ناشئة عربية تحصل على تمويل ضخم',
         'source': 'ومضة',
         'time': 'منذ 7 ساعات',
         'image': '🚀',
-        'category': 'تقنية',
+        'category': 'تكنولوجيا',
       },
     ],
     'اقتصاد': [
@@ -157,6 +162,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
           // Search AppBar
@@ -182,13 +188,18 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                 controller: _tabController,
                 isScrollable: true,
                 indicator: BoxDecoration(
-                  color: theme.primaryColor,
-                  borderRadius: BorderRadius.circular(20),
+                  gradient: LinearGradient(
+                    colors: [
+                      theme.colorScheme.primary,
+                      theme.colorScheme.secondary,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 indicatorSize: TabBarIndicatorSize.label,
                 dividerColor: Colors.transparent,
                 labelColor: Colors.white,
-                unselectedLabelColor: isDark ? Colors.white70 : Colors.black87,
+                unselectedLabelColor: theme.textTheme.bodyMedium?.color,
                 labelStyle: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
@@ -236,11 +247,15 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
         color: Colors.transparent,
         child: Container(
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF2C2C2C) : Colors.grey[100],
+            color: theme.cardTheme.color,
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: theme.colorScheme.outline.withOpacity(0.3),
+              width: 1,
+            ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: theme.shadowColor.withOpacity(0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -249,19 +264,21 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           child: TextField(
             controller: _searchController,
             textAlign: TextAlign.right,
+            style: theme.textTheme.bodyLarge,
             decoration: InputDecoration(
               hintText: 'ابحث عن الأخبار...',
+              hintStyle: theme.inputDecorationTheme.hintStyle,
               prefixIcon:
                   _isSearching
                       ? IconButton(
-                        icon: const Icon(Icons.clear),
+                        icon: Icon(Icons.clear, color: theme.iconTheme.color),
                         onPressed: () {
                           _searchController.clear();
                           FocusScope.of(context).unfocus();
                         },
                       )
                       : null,
-              suffixIcon: Icon(Icons.search, color: theme.primaryColor),
+              suffixIcon: Icon(Icons.search, color: theme.colorScheme.primary),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
@@ -307,11 +324,15 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+          color: theme.cardTheme.color,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: theme.colorScheme.outline.withOpacity(0.2),
+            width: 1,
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(isDark ? 0.3 : 0.08),
+              color: theme.shadowColor.withOpacity(0.1),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -337,8 +358,8 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            theme.primaryColor,
-                            theme.primaryColor.withOpacity(0.6),
+                            theme.colorScheme.primary,
+                            theme.colorScheme.secondary,
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -366,13 +387,25 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: theme.primaryColor.withOpacity(0.1),
+                            gradient: LinearGradient(
+                              colors: [
+                                theme.colorScheme.primary.withOpacity(0.2),
+                                theme.colorScheme.secondary.withOpacity(0.2),
+                              ],
+                            ),
                             borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: theme.colorScheme.primary.withOpacity(0.3),
+                              width: 1,
+                            ),
                           ),
                           child: Text(
                             news['category'],
                             style: TextStyle(
-                              color: theme.primaryColor,
+                              color:
+                                  isDark
+                                      ? theme.colorScheme.secondary
+                                      : theme.colorScheme.primary,
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
                             ),
@@ -396,7 +429,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                             Icon(
                               Icons.access_time,
                               size: 14,
-                              color: isDark ? Colors.white54 : Colors.black54,
+                              color: theme.textTheme.bodySmall?.color,
                             ),
                             const SizedBox(width: 4),
                             Text(
@@ -407,7 +440,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                             Icon(
                               Icons.newspaper,
                               size: 14,
-                              color: isDark ? Colors.white54 : Colors.black54,
+                              color: theme.textTheme.bodySmall?.color,
                             ),
                             const SizedBox(width: 4),
                             Flexible(
@@ -429,7 +462,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                     onPressed: () {
                       // Add to bookmarks
                     },
-                    color: isDark ? Colors.white70 : Colors.black54,
+                    color: theme.iconTheme.color,
                   ),
                 ],
               ),
@@ -461,13 +494,18 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: theme.primaryColor.withOpacity(0.1),
+                gradient: LinearGradient(
+                  colors: [
+                    theme.colorScheme.primary.withOpacity(0.2),
+                    theme.colorScheme.secondary.withOpacity(0.2),
+                  ],
+                ),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.search_off,
                 size: 50,
-                color: theme.primaryColor,
+                color: theme.colorScheme.primary,
               ),
             ),
           ),

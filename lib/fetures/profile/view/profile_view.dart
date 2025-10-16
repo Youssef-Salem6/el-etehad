@@ -79,12 +79,11 @@ class _ProfileViewState extends State<ProfileView>
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final primaryColor = Theme.of(context).primaryColor;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor:
-          isDark ? const Color(0xFF121212) : const Color(0xFFF5F5F5),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -92,7 +91,7 @@ class _ProfileViewState extends State<ProfileView>
           SliverToBoxAdapter(
             child: FadeTransition(
               opacity: _headerAnimation,
-              child: _buildProfileHeader(isDark, primaryColor),
+              child: _buildProfileHeader(theme, isDark),
             ),
           ),
 
@@ -100,7 +99,7 @@ class _ProfileViewState extends State<ProfileView>
           SliverToBoxAdapter(
             child: FadeTransition(
               opacity: _headerAnimation,
-              child: _buildStatsSection(isDark, primaryColor),
+              child: _buildStatsSection(theme, isDark),
             ),
           ),
 
@@ -115,18 +114,11 @@ class _ProfileViewState extends State<ProfileView>
                   children: [
                     Text(
                       'الأخبار المحفوظة',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: isDark ? Colors.white : Colors.black87,
-                      ),
+                      style: theme.textTheme.headlineMedium,
                     ),
                     Text(
                       '${savedNews.length} خبر',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: isDark ? Colors.grey[400] : Colors.grey[600],
-                      ),
+                      style: theme.textTheme.bodyMedium,
                     ),
                   ],
                 ),
@@ -149,7 +141,7 @@ class _ProfileViewState extends State<ProfileView>
                       child: Opacity(opacity: value, child: child),
                     );
                   },
-                  child: _buildNewsCard(savedNews[index], isDark, primaryColor),
+                  child: _buildNewsCard(savedNews[index], theme, isDark),
                 );
               }, childCount: savedNews.length),
             ),
@@ -161,19 +153,26 @@ class _ProfileViewState extends State<ProfileView>
     );
   }
 
-  Widget _buildProfileHeader(bool isDark, Color primaryColor) {
+  Widget _buildProfileHeader(ThemeData theme, bool isDark) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 50, 20, 30),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [primaryColor, primaryColor.withOpacity(0.7)],
+          colors: [theme.colorScheme.primary, theme.colorScheme.secondary],
         ),
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: theme.shadowColor.withOpacity(0.2),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       child: Column(
         children: [
@@ -190,6 +189,10 @@ class _ProfileViewState extends State<ProfileView>
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.3),
+                      width: 1,
+                    ),
                   ),
                   child: const Icon(
                     Icons.arrow_forward_ios,
@@ -227,7 +230,7 @@ class _ProfileViewState extends State<ProfileView>
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withOpacity(0.3),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),
@@ -236,7 +239,11 @@ class _ProfileViewState extends State<ProfileView>
                   child: ClipOval(
                     child:
                         userImage.isEmpty
-                            ? Icon(Icons.person, size: 60, color: primaryColor)
+                            ? Icon(
+                              Icons.person,
+                              size: 60,
+                              color: theme.colorScheme.primary,
+                            )
                             : Image.network(
                               userImage,
                               fit: BoxFit.cover,
@@ -244,7 +251,7 @@ class _ProfileViewState extends State<ProfileView>
                                 return Icon(
                                   Icons.person,
                                   size: 60,
-                                  color: primaryColor,
+                                  color: theme.colorScheme.primary,
                                 );
                               },
                             ),
@@ -258,10 +265,9 @@ class _ProfileViewState extends State<ProfileView>
           // Name
           Text(
             userName,
-            style: const TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
+            style: theme.textTheme.headlineLarge?.copyWith(
               color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 8),
@@ -274,7 +280,9 @@ class _ProfileViewState extends State<ProfileView>
               const SizedBox(width: 8),
               Text(
                 userEmail,
-                style: const TextStyle(fontSize: 16, color: Colors.white70),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.white70,
+                ),
               ),
             ],
           ),
@@ -284,7 +292,7 @@ class _ProfileViewState extends State<ProfileView>
     );
   }
 
-  Widget _buildStatsSection(bool isDark, Color primaryColor) {
+  Widget _buildStatsSection(ThemeData theme, bool isDark) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
@@ -294,8 +302,8 @@ class _ProfileViewState extends State<ProfileView>
               icon: Icons.bookmark,
               label: 'محفوظات',
               value: '${savedNews.length}',
+              theme: theme,
               isDark: isDark,
-              primaryColor: primaryColor,
               delay: 200,
             ),
           ),
@@ -305,8 +313,8 @@ class _ProfileViewState extends State<ProfileView>
               icon: Icons.favorite,
               label: 'إعجابات',
               value: '${savedNews.length * 5}',
+              theme: theme,
               isDark: isDark,
-              primaryColor: primaryColor,
               delay: 300,
             ),
           ),
@@ -316,8 +324,8 @@ class _ProfileViewState extends State<ProfileView>
               icon: Icons.visibility,
               label: 'مشاهدات',
               value: '${savedNews.length * 12}',
+              theme: theme,
               isDark: isDark,
-              primaryColor: primaryColor,
               delay: 400,
             ),
           ),
@@ -330,8 +338,8 @@ class _ProfileViewState extends State<ProfileView>
     required IconData icon,
     required String label,
     required String value,
+    required ThemeData theme,
     required bool isDark,
-    required Color primaryColor,
     required int delay,
   }) {
     return TweenAnimationBuilder<double>(
@@ -344,11 +352,15 @@ class _ProfileViewState extends State<ProfileView>
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+          color: theme.cardTheme.color,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: theme.colorScheme.outline.withOpacity(0.2),
+            width: 1,
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
+              color: theme.shadowColor.withOpacity(0.1),
               blurRadius: 15,
               offset: const Offset(0, 5),
             ),
@@ -356,24 +368,28 @@ class _ProfileViewState extends State<ProfileView>
         ),
         child: Column(
           children: [
-            Icon(icon, color: primaryColor, size: 28),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    theme.colorScheme.primary.withOpacity(0.2),
+                    theme.colorScheme.secondary.withOpacity(0.2),
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: theme.colorScheme.primary, size: 24),
+            ),
             const SizedBox(height: 8),
             Text(
               value,
-              style: TextStyle(
-                fontSize: 20,
+              style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : Colors.black87,
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 13,
-                color: isDark ? Colors.grey[400] : Colors.grey[600],
-              ),
-            ),
+            Text(label, style: theme.textTheme.bodySmall),
           ],
         ),
       ),
@@ -382,17 +398,21 @@ class _ProfileViewState extends State<ProfileView>
 
   Widget _buildNewsCard(
     Map<String, String> news,
+    ThemeData theme,
     bool isDark,
-    Color primaryColor,
   ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: theme.colorScheme.outline.withOpacity(0.2),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
+            color: theme.shadowColor.withOpacity(0.1),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -404,9 +424,16 @@ class _ProfileViewState extends State<ProfileView>
           children: [
             // News Image
             Container(
-              width: 120,
-              height: 120,
-              color: primaryColor.withOpacity(0.1),
+              width: 125,
+              height: 130,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    theme.colorScheme.primary.withOpacity(0.1),
+                    theme.colorScheme.secondary.withOpacity(0.1),
+                  ],
+                ),
+              ),
               child:
                   news['image']!.isNotEmpty
                       ? Image.network(
@@ -416,14 +443,14 @@ class _ProfileViewState extends State<ProfileView>
                           return Icon(
                             Icons.image,
                             size: 40,
-                            color: primaryColor.withOpacity(0.3),
+                            color: theme.colorScheme.primary.withOpacity(0.5),
                           );
                         },
                       )
                       : Icon(
                         Icons.article,
                         size: 40,
-                        color: primaryColor.withOpacity(0.3),
+                        color: theme.colorScheme.primary.withOpacity(0.5),
                       ),
             ),
 
@@ -441,14 +468,25 @@ class _ProfileViewState extends State<ProfileView>
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.2),
+                        gradient: LinearGradient(
+                          colors: [
+                            theme.colorScheme.primary.withOpacity(0.2),
+                            theme.colorScheme.secondary.withOpacity(0.2),
+                          ],
+                        ),
                         borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: theme.colorScheme.primary.withOpacity(0.3),
+                          width: 1,
+                        ),
                       ),
                       child: Text(
                         news['category']!,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: primaryColor,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color:
+                              isDark
+                                  ? theme.colorScheme.secondary
+                                  : theme.colorScheme.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -460,10 +498,8 @@ class _ProfileViewState extends State<ProfileView>
                       news['title']!,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 15,
+                      style: theme.textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: isDark ? Colors.white : Colors.black87,
                         height: 1.3,
                       ),
                     ),
@@ -475,16 +511,10 @@ class _ProfileViewState extends State<ProfileView>
                         Icon(
                           Icons.access_time,
                           size: 14,
-                          color: isDark ? Colors.grey[400] : Colors.grey[600],
+                          color: theme.textTheme.bodySmall?.color,
                         ),
                         const SizedBox(width: 5),
-                        Text(
-                          news['date']!,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: isDark ? Colors.grey[400] : Colors.grey[600],
-                          ),
-                        ),
+                        Text(news['date']!, style: theme.textTheme.bodySmall),
                       ],
                     ),
                   ],
@@ -495,7 +525,23 @@ class _ProfileViewState extends State<ProfileView>
             // Bookmark Icon
             Padding(
               padding: const EdgeInsets.only(left: 15),
-              child: Icon(Icons.bookmark, color: primaryColor, size: 24),
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      theme.colorScheme.primary.withOpacity(0.2),
+                      theme.colorScheme.secondary.withOpacity(0.2),
+                    ],
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.bookmark,
+                  color: theme.colorScheme.primary,
+                  size: 20,
+                ),
+              ),
             ),
           ],
         ),
