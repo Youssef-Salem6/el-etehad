@@ -103,8 +103,8 @@ class _AnimatedArticleCardState extends State<AnimatedArticleCard>
                               end: Alignment.bottomCenter,
                               colors: [
                                 Colors.transparent,
-                                Colors.black.withOpacity(0.7),
-                                Colors.black,
+                                Color(0xFF271C2E),
+                                Color(0xFF000014),
                               ],
                             ),
                             borderRadius: const BorderRadius.only(

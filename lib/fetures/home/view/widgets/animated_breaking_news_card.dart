@@ -106,7 +106,7 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
                           child: const Text(
                             'عاجل',
                             style: TextStyle(
-                              color: Colors.red,
+                              color: Color(0xFF271C2E),
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
@@ -124,10 +124,10 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
                       gradient: const LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
-                        // stops: [0.5, 1],
+                        stops: [0.3, 0.75, 1],
                         colors: [
-                          Colors.black,
-                          Color.fromARGB(203, 0, 0, 0),
+                          Color(0xFF000014),
+                          Color(0xFF271C2E),
                           Colors.transparent,
                         ],
                       ),
