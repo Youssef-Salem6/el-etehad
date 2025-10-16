@@ -4,6 +4,7 @@ class SectionTitle extends StatelessWidget {
   final String title;
   final IconData icon;
   final Color color;
+  final bool isMore;
   final VoidCallback? onMorePressed;
 
   const SectionTitle({
@@ -12,6 +13,7 @@ class SectionTitle extends StatelessWidget {
     required this.icon,
     required this.color,
     this.onMorePressed,
+    required this.isMore,
   });
 
   @override
@@ -34,7 +36,13 @@ class SectionTitle extends StatelessWidget {
             style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const Spacer(),
-          TextButton(onPressed: onMorePressed, child: const Text('المزيد')),
+          Visibility(
+            visible: isMore,
+            child: TextButton(
+              onPressed: onMorePressed,
+              child: const Text('المزيد'),
+            ),
+          ),
         ],
       ),
     );

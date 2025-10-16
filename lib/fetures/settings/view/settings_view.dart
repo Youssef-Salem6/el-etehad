@@ -67,26 +67,26 @@ class _SettingsViewState extends State<SettingsView>
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: const Text(
+              title: Text(
                 'الإعدادات',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onPrimary,
+                ),
               ),
               background: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      colorScheme.primary,
-                      colorScheme.primary.withOpacity(0.8),
-                    ],
+                    colors: [Color(0xFF000014), Color(0xFF271C2E)],
                   ),
                 ),
                 child: Center(
                   child: Icon(
                     Icons.settings_rounded,
                     size: 80,
-                    color: Colors.white.withOpacity(0.5),
+                    color: colorScheme.onPrimary.withOpacity(0.6),
                   ),
                 ),
               ),
@@ -110,7 +110,7 @@ class _SettingsViewState extends State<SettingsView>
                       _buildSectionTitle(
                         'المظهر',
                         Icons.palette_rounded,
-                        colorScheme.primary,
+                        colorScheme.secondary,
                       ),
                       const SizedBox(height: 12),
                       _buildThemeCard(),
@@ -121,18 +121,14 @@ class _SettingsViewState extends State<SettingsView>
                       _buildSectionTitle(
                         'عام',
                         Icons.tune_rounded,
-                        colorScheme.primary,
+                        colorScheme.tertiary,
                       ),
                       const SizedBox(height: 12),
                       _buildSettingsCard(
                         icon: Icons.notifications_rounded,
                         title: 'الإشعارات',
                         subtitle: 'إدارة إشعارات التطبيق',
-                        trailing: Switch(
-                          value: true,
-                          onChanged: (value) {},
-                          activeColor: colorScheme.primary,
-                        ),
+                        trailing: Switch(value: true, onChanged: (value) {}),
                       ),
 
                       const SizedBox(height: 30),
@@ -141,14 +137,18 @@ class _SettingsViewState extends State<SettingsView>
                       _buildSectionTitle(
                         'الحساب',
                         Icons.person_rounded,
-                        colorScheme.primary,
+                        colorScheme.secondary,
                       ),
                       const SizedBox(height: 12),
                       _buildSettingsCard(
                         icon: Icons.edit_rounded,
                         title: 'الملف الشخصي',
                         subtitle: 'قم برؤيه معلوماتك',
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                         onTap: () {
                           Navigator.of(context, rootNavigator: true).push(
                             MaterialPageRoute(
@@ -162,7 +162,11 @@ class _SettingsViewState extends State<SettingsView>
                         icon: Icons.lock_rounded,
                         title: 'الخصوصية والأمان',
                         subtitle: 'إدارة خصوصيتك',
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                         onTap: () {},
                       ),
 
@@ -172,14 +176,18 @@ class _SettingsViewState extends State<SettingsView>
                       _buildSectionTitle(
                         'الدعم',
                         Icons.help_rounded,
-                        colorScheme.primary,
+                        colorScheme.tertiary,
                       ),
                       const SizedBox(height: 12),
                       _buildSettingsCard(
                         icon: Icons.info_rounded,
                         title: 'حول التطبيق',
                         subtitle: 'الإصدار 1.0.0',
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                         onTap: () {},
                       ),
                       const SizedBox(height: 12),
@@ -187,7 +195,11 @@ class _SettingsViewState extends State<SettingsView>
                         icon: Icons.contact_support_rounded,
                         title: 'اتصل بنا',
                         subtitle: 'نحن هنا للمساعدة',
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                         onTap: () {},
                       ),
 
@@ -209,15 +221,29 @@ class _SettingsViewState extends State<SettingsView>
   }
 
   Widget _buildSectionTitle(String title, IconData icon, Color color) {
-    return Row(
-      children: [
-        Icon(icon, size: 20, color: color),
-        const SizedBox(width: 8),
-        Text(
-          title,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, size: 18, color: color),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -235,7 +261,7 @@ class _SettingsViewState extends State<SettingsView>
             return Transform.scale(
               scale: scale,
               child: Card(
-                elevation: 3,
+                elevation: isDark ? 4 : 2,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -245,16 +271,10 @@ class _SettingsViewState extends State<SettingsView>
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors:
-                          isDark
-                              ? [
-                                colorScheme.primary.withOpacity(0.3),
-                                colorScheme.primary.withOpacity(0.2),
-                              ]
-                              : [
-                                colorScheme.primary.withOpacity(0.1),
-                                colorScheme.primary.withOpacity(0.05),
-                              ],
+                      colors: [
+                        colorScheme.secondaryContainer,
+                        colorScheme.secondaryContainer.withOpacity(0.8),
+                      ],
                     ),
                   ),
                   child: Padding(
@@ -266,12 +286,13 @@ class _SettingsViewState extends State<SettingsView>
                           duration: const Duration(milliseconds: 300),
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: colorScheme.primary,
+                            color: colorScheme.secondary,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: colorScheme.primary.withOpacity(0.3),
-                                blurRadius: 8,
+                                color: colorScheme.secondary.withOpacity(0.4),
+                                blurRadius: 12,
+                                spreadRadius: 1,
                                 offset: const Offset(0, 4),
                               ),
                             ],
@@ -280,7 +301,7 @@ class _SettingsViewState extends State<SettingsView>
                             isDark
                                 ? Icons.dark_mode_rounded
                                 : Icons.light_mode_rounded,
-                            color: Colors.white,
+                            color: colorScheme.onSecondary,
                             size: 28,
                           ),
                         ),
@@ -291,9 +312,10 @@ class _SettingsViewState extends State<SettingsView>
                             children: [
                               Text(
                                 'الوضع ${isDark ? 'الداكن' : 'الفاتح'}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
+                                  color: colorScheme.onSecondaryContainer,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -303,7 +325,8 @@ class _SettingsViewState extends State<SettingsView>
                                     : 'أنت تستخدم الوضع الفاتح',
                                 style: TextStyle(
                                   fontSize: 13,
-                                  color: Colors.grey.shade600,
+                                  color: colorScheme.onSecondaryContainer
+                                      .withOpacity(0.7),
                                 ),
                               ),
                             ],
@@ -315,13 +338,13 @@ class _SettingsViewState extends State<SettingsView>
                           child: Transform.scale(
                             scale: 1.1,
                             child: Switch(
+                              inactiveThumbColor: Colors.white,
                               value: isDark,
                               onChanged: (value) {
                                 cubit.toggleTheme();
                                 _scaleController.reset();
                                 _scaleController.forward();
                               },
-                              activeColor: colorScheme.primary,
                             ),
                           ),
                         ),
@@ -345,50 +368,68 @@ class _SettingsViewState extends State<SettingsView>
     void Function()? onTap,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Card(
-      elevation: 2,
+      elevation: isDark ? 3 : 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: colorScheme.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(icon, color: colorScheme.primary, size: 24),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: colorScheme.outline.withOpacity(0.2),
+              width: 1,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        colorScheme.primary.withOpacity(0.15),
+                        colorScheme.primary.withOpacity(0.08),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                  ],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(icon, color: colorScheme.primary, size: 24),
                 ),
-              ),
-              trailing,
-            ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                trailing,
+              ],
+            ),
           ),
         ),
       ),
@@ -397,58 +438,112 @@ class _SettingsViewState extends State<SettingsView>
 
   Widget _buildLogoutButton() {
     final colorScheme = Theme.of(context).colorScheme;
+    // final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder:
-                (context) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  title: const Text('تسجيل الخروج'),
-                  content: const Text('هل أنت متأكد من رغبتك في تسجيل الخروج؟'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('إلغاء'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        // Add logout logic here
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorScheme.secondary,
-                      ),
-                      child: const Text('تسجيل الخروج'),
-                    ),
-                  ],
-                ),
-          );
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: colorScheme.secondary,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.error.withOpacity(0.2),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
           ),
-          elevation: 3,
-        ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.logout_rounded),
-            SizedBox(width: 8),
-            Text(
-              'تسجيل الخروج',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ],
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder:
+                  (context) => AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    title: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: colorScheme.errorContainer,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.logout_rounded,
+                            color: colorScheme.error,
+                            size: 24,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          'تسجيل الخروج',
+                          style: TextStyle(
+                            color: colorScheme.onSurface,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    content: Text(
+                      'هل أنت متأكد من رغبتك في تسجيل الخروج؟',
+                      style: TextStyle(
+                        color: colorScheme.onSurfaceVariant,
+                        fontSize: 16,
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: TextButton.styleFrom(
+                          foregroundColor: colorScheme.onSurfaceVariant,
+                        ),
+                        child: const Text('إلغاء'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          // Add logout logic here
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: colorScheme.error,
+                          foregroundColor: colorScheme.onError,
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text('تسجيل الخروج'),
+                      ),
+                    ],
+                  ),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: colorScheme.error,
+            foregroundColor: colorScheme.onError,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-          ],
+            elevation: 0,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.logout_rounded, color: colorScheme.onError),
+              const SizedBox(width: 8),
+              Text(
+                'تسجيل الخروج',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onError,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

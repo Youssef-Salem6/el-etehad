@@ -104,14 +104,20 @@ class _AnimatedVideoCardState extends State<AnimatedVideoCard>
                           Container(
                             height: 120,
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  colorScheme.primary,
-                                  colorScheme.primary.withOpacity(0.8),
-                                  colorScheme.secondary,
-                                ],
+                              // gradient: LinearGradient(
+                              //   begin: Alignment.topLeft,
+                              //   end: Alignment.bottomRight,
+                              //   colors: [
+                              //     colorScheme.primary,
+                              //     colorScheme.primary.withOpacity(0.8),
+                              //     colorScheme.secondary,
+                              //   ],
+                              // ),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=400&q=80",
+                                ),
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),

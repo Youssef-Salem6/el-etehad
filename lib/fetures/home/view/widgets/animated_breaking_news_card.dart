@@ -1,4 +1,8 @@
+import 'package:el_etehad/core/paths/images_paths.dart';
+import 'package:el_etehad/fetures/home/view/widgets/card_footer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class AnimatedBreakingNewsCard extends StatefulWidget {
   final int index;
@@ -59,32 +63,29 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
       child: ScaleTransition(
         scale: _scaleAnimation,
         child: Container(
-          width: 280,
-          margin: const EdgeInsets.only(left: 12),
+          width: 240,
+          margin: const EdgeInsets.only(left: 16, bottom: 2),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.red.shade400, Colors.orange.shade400],
-            ),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.red.withOpacity(0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
+            image: const DecorationImage(
+              image: NetworkImage(
+                "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=180",
               ),
-            ],
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [BoxShadow(blurRadius: 6, offset: const Offset(0, 5))],
           ),
           child: Material(
             color: Colors.transparent,
             child: InkWell(
               borderRadius: BorderRadius.circular(16),
               onTap: widget.onTap,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -92,6 +93,13 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.7),
+                                blurRadius: 2,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -105,39 +113,76 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
                           ),
                         ),
                         const Spacer(),
-                        Text(
-                          widget.time,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                  ),
+                  const SizedBox(height: 12),
+                  const Spacer(),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      gradient: const LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        // stops: [0.5, 1],
+                        colors: [
+                          Colors.black,
+                          Color.fromARGB(203, 0, 0, 0),
+                          Colors.transparent,
+                        ],
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    const Spacer(),
-                    const Row(
-                      children: [
-                        Icon(Icons.arrow_back, color: Colors.white, size: 16),
-                        SizedBox(width: 4),
-                        Text(
-                          'اقرأ المزيد',
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        ),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Image(
+                                    image: AssetImage(ImagesPaths.logoIcon),
+                                    width: 20,
+                                  ),
+                                  Gap(5),
+                                  Text(
+                                    "سياسه",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                width: 220,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    "ذكاء اصطناعي جديد قادر على تشخيص الأمراض النادرة بدقة تصل إلى 95%",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 220,
+                                child: CardFooter(isInsideCard: true),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

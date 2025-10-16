@@ -146,7 +146,7 @@ class _CategoryNewsState extends State<CategoryNews>
         appBar: AppBar(
           title: Text(
             widget.categoryName,
-            style: Theme.of(context).textTheme.displaySmall,
+            style: TextStyle(color: Colors.white),
           ),
         ),
         body: ListView.builder(

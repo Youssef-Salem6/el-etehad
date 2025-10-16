@@ -1,3 +1,4 @@
+import 'package:el_etehad/core/paths/images_paths.dart';
 import 'package:el_etehad/fetures/category/view/category_News.dart';
 import 'package:el_etehad/fetures/home/view/widgets/animated_artical_card.dart';
 import 'package:el_etehad/fetures/home/view/widgets/animated_breaking_news_card.dart';
@@ -30,6 +31,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
   late ScrollController _scrollController;
   double _scrollProgress = 0.0;
+
+  // ألوان ثابتة للـ AppBar (نفس ألوان Light Mode)
+  // static const Color _appBarPrimaryColor = Color(0xFF0d0316);
+  static const Color _appBarSecondaryColor = Color(0xFF9b3ec7);
 
   @override
   void initState() {
@@ -115,7 +120,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // Animated App Bar with Logo
+          // Animated App Bar with Logo - Always Light Mode Colors
           SliverAppBar(
             expandedHeight: 200,
             floating: false,
@@ -147,16 +152,18 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  // Gradient Background
+                  // Gradient Background - Always Light Mode Colors
                   Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          colorScheme.primary,
-                          colorScheme.primary.withOpacity(0.8),
-                          colorScheme.secondary.withOpacity(0.6),
+                          // _appBarPrimaryColor,
+                          // Color(
+                          //   0xFF0d0316,
+                          // ), // Primary with slight opacity effect
+                          // Color(0xFF7c2a9e), // Secondary accent
                         ],
                       ),
                     ),
@@ -239,7 +246,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                                       ),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: colorScheme.secondary
+                                          color: _appBarSecondaryColor
                                               .withOpacity(
                                                 0.3 * (1 - _scrollProgress),
                                               ),
@@ -252,7 +259,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(24),
                                       child: Image.asset(
-                                        "assets/images/logo ethad.png",
+                                        ImagesPaths.logoImage,
                                         fit: BoxFit.fill,
                                       ),
                                     ),
@@ -281,6 +288,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
                   // Breaking News Section
                   SectionTitle(
+                    isMore: true,
                     title: 'عاجل',
                     icon: Icons.bolt,
                     color: colorScheme.secondary,
@@ -293,6 +301,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
                   // Videos Section
                   SectionTitle(
+                    isMore: true,
                     title: 'فيديوهات',
                     icon: Icons.play_circle_outline,
                     color: colorScheme.primary,
@@ -305,6 +314,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
                   // Featured Articles
                   SectionTitle(
+                    isMore: true,
                     title: 'مقالات مميزة',
                     icon: Icons.article_outlined,
                     color: Colors.orange,
@@ -317,6 +327,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
                   // Categories Grid
                   SectionTitle(
+                    isMore: false,
                     title: 'الأقسام',
                     icon: Icons.grid_view,
                     color: colorScheme.primary,
@@ -337,10 +348,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
   Widget _buildBreakingNewsSection() {
     return SizedBox(
-      height: 140,
+      height: 380,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         physics: const BouncingScrollPhysics(),
         itemCount: 5,
         itemBuilder: (context, index) {
@@ -365,7 +376,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       height: 230,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.only(right: 16, left: 16, bottom: 8),
+        padding: const EdgeInsets.only(right: 16, left: 16, bottom: 8, top: 8),
         physics: const BouncingScrollPhysics(),
         itemCount: 8,
         itemBuilder: (context, index) {
@@ -393,8 +404,11 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       itemBuilder: (context, index) {
         return AnimatedArticleCard(
           index: index,
-          title: 'مقال مميز حول الأحداث الجارية ${index + 1}',
-          category: 'سياسة',
+          description:
+              "أعلنت مجموعة من الباحثين في جامعة ستانفورد عن تطوير نظام ذكاء اصطناعي جديد قادر على تشخيص الأمراض النادرة بدقة تصل إلى 95%، وهو ما يمثل قفزة نوعية في عالم الطب الرقمي.",
+          title:
+              'الذكاء الاصطناعي يحقق طفرة جديدة في مجال الطب بتشخيص الأمراض المبكرة',
+          category: 'تكنولوجيا',
           readTime: '${index + 3} دقائق',
           onTap: () {
             // Handle tap
@@ -408,16 +422,18 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     final colorScheme = Theme.of(context).colorScheme;
 
     final categories = [
-      {
-        'name': 'سياسة',
-        'icon': Icons.account_balance,
-        'color': colorScheme.primary,
-      },
+      {'name': 'الرئيسية', 'icon': Icons.home, 'color': colorScheme.primary},
+      {'name': 'سياسة', 'icon': Icons.account_balance, 'color': Colors.blue},
       {'name': 'رياضة', 'icon': Icons.sports_soccer, 'color': Colors.green},
-      {'name': 'اقتصاد', 'icon': Icons.trending_up, 'color': Colors.orange},
+      {'name': 'عالمي', 'icon': Icons.public, 'color': Colors.indigo},
+      {'name': 'فن', 'icon': Icons.theater_comedy, 'color': Colors.pink},
+      {'name': 'منوعات', 'icon': Icons.apps, 'color': Colors.orange},
+      {'name': 'انفوجرافيك', 'icon': Icons.bar_chart, 'color': Colors.teal},
+      {'name': 'حوادث', 'icon': Icons.warning, 'color': colorScheme.secondary},
+      {'name': 'اقتصاد', 'icon': Icons.trending_up, 'color': Colors.amber},
       {'name': 'تكنولوجيا', 'icon': Icons.computer, 'color': Colors.purple},
-      {'name': 'ثقافة', 'icon': Icons.theater_comedy, 'color': Colors.pink},
-      {'name': 'صحة', 'icon': Icons.favorite, 'color': colorScheme.secondary},
+      {'name': 'صحة', 'icon': Icons.favorite, 'color': Colors.red},
+      {'name': 'ثقافة', 'icon': Icons.menu_book, 'color': Colors.deepPurple},
     ];
 
     return GridView.builder(

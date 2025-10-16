@@ -3,7 +3,6 @@ import 'package:el_etehad/fetures/news/view/widgets/news_app_bar.dart';
 import 'package:el_etehad/fetures/news/view/widgets/news_content.dart';
 import 'package:flutter/material.dart';
 
-
 class NewDetails extends StatefulWidget {
   const NewDetails({super.key});
 

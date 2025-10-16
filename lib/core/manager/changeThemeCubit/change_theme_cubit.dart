@@ -7,7 +7,7 @@ part 'change_theme_state.dart';
 
 class ChangeThemeCubit extends Cubit<ChangeThemeState> {
   static const String _themeKey = 'theme_mode';
-  
+
   ChangeThemeCubit() : super(ChangeThemeInitial(ThemeMode.light)) {
     _loadThemeFromPrefs();
   }
@@ -15,7 +15,8 @@ class ChangeThemeCubit extends Cubit<ChangeThemeState> {
   // Load theme from SharedPreferences
   Future<void> _loadThemeFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
-    final isDark = prefs.getBool(_themeKey) ?? false; // Default to false (light mode)
+    final isDark =
+        prefs.getBool(_themeKey) ?? false; // Default to false (light mode)
     emit(ChangeThemeInitial(isDark ? ThemeMode.dark : ThemeMode.light));
   }
 
