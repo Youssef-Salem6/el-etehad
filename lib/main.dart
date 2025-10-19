@@ -1,6 +1,7 @@
 import 'package:el_etehad/core/manager/changeThemeCubit/change_theme_cubit.dart';
 import 'package:el_etehad/core/themes/appTheme.dart';
 import 'package:el_etehad/core/view/nav_view.dart';
+import 'package:el_etehad/fetures/services/manager/cubit/get_current_cubit.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,8 +19,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ChangeThemeCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => ChangeThemeCubit()),
+        BlocProvider(create: (context) => GetCurrentCubit()),
+      ],
       child: BlocBuilder<ChangeThemeCubit, ChangeThemeState>(
         builder: (context, state) {
           ThemeMode themeMode = ThemeMode.light;

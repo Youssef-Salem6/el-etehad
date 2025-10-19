@@ -1,3 +1,4 @@
+import 'package:el_etehad/fetures/services/view/current_calc_view.dart';
 import 'package:flutter/material.dart';
 
 class ServicesGridSection extends StatelessWidget {
@@ -93,12 +94,12 @@ class ServicesGridSection extends StatelessWidget {
   Widget _buildServiceCard(ServiceItem service, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('فتح ${service.title}'),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+        if (service.icon == Icons.currency_exchange) {
+          Navigator.of(
+            context,
+            rootNavigator: false,
+          ).push(MaterialPageRoute(builder: (context) => CurrentCalcView()));
+        }
       },
       child: Container(
         decoration: BoxDecoration(
