@@ -2,6 +2,7 @@
 import 'package:el_etehad/fetures/games/view/games_view.dart';
 import 'package:el_etehad/fetures/home/view/home_view.dart';
 import 'package:el_etehad/fetures/search/view/search_view.dart';
+import 'package:el_etehad/fetures/services/view/side_sevices.dart';
 import 'package:el_etehad/fetures/settings/view/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -69,6 +70,7 @@ class _NavViewState extends State<NavView> with TickerProviderStateMixin {
       const HomeView(),
       const SearchView(),
       const GamesView(),
+      const SideServices(),
       const SettingsView(),
     ];
   }
@@ -104,16 +106,24 @@ class _NavViewState extends State<NavView> with TickerProviderStateMixin {
         activeColor: activeColor,
         inactiveColor: inactiveColor,
         textColor: textColor,
-        index: 3,
+        index: 2,
       ),
 
+      _buildNavBarItem(
+        icon: Icons.bookmark_outline,
+        title: "الإعدادات",
+        activeColor: activeColor,
+        inactiveColor: inactiveColor,
+        textColor: textColor,
+        index: 3,
+      ),
       _buildNavBarItem(
         icon: Icons.settings_outlined,
         title: "الإعدادات",
         activeColor: activeColor,
         inactiveColor: inactiveColor,
         textColor: textColor,
-        index: 3,
+        index: 4,
       ),
     ];
   }

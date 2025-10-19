@@ -155,17 +155,17 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                   // Gradient Background - Always Light Mode Colors
                   Container(
                     decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          // _appBarPrimaryColor,
-                          // Color(
-                          //   0xFF0d0316,
-                          // ), // Primary with slight opacity effect
-                          // Color(0xFF7c2a9e), // Secondary accent
-                        ],
-                      ),
+                      // gradient: LinearGradient(
+                      //   begin: Alignment.topLeft,
+                      //   end: Alignment.bottomRight,
+                      //   colors: [
+                      //     // _appBarPrimaryColor,
+                      //     // Color(
+                      //     //   0xFF0d0316,
+                      //     // ), // Primary with slight opacity effect
+                      //     // Color(0xFF7c2a9e), // Secondary accent
+                      //   ],
+                      // ),
                     ),
                   ),
                   // Animated Circle 1
