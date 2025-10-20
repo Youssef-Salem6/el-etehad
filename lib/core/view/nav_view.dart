@@ -1,9 +1,9 @@
 // import 'package:el_etehad/fetures/following/view/following_view.dart';
-import 'package:el_etehad/fetures/games/view/games_view.dart';
-import 'package:el_etehad/fetures/home/view/home_view.dart';
-import 'package:el_etehad/fetures/search/view/search_view.dart';
-import 'package:el_etehad/fetures/services/view/side_sevices.dart';
-import 'package:el_etehad/fetures/settings/view/settings_view.dart';
+import 'package:el_etehad/features/games/view/games_view.dart';
+import 'package:el_etehad/features/home/view/home_view.dart';
+import 'package:el_etehad/features/search/view/search_view.dart';
+import 'package:el_etehad/features/services/view/side_sevices.dart';
+import 'package:el_etehad/features/settings/view/settings_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
