@@ -1,5 +1,6 @@
 import 'package:el_etehad/core/paths/images_paths.dart';
 import 'package:el_etehad/fetures/category/view/category_News.dart';
+import 'package:el_etehad/fetures/home/view/widgets/HorizontalCategorySlider.dart';
 import 'package:el_etehad/fetures/home/view/widgets/animated_artical_card.dart';
 import 'package:el_etehad/fetures/home/view/widgets/animated_breaking_news_card.dart';
 import 'package:el_etehad/fetures/home/view/widgets/animated_video_card.dart';
@@ -82,7 +83,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         slivers: [
           // Clean Modern App Bar
           SliverAppBar(
-            expandedHeight: 140,
+            expandedHeight: 160,
             floating: false,
             pinned: true,
             elevation: 0,
@@ -102,19 +103,9 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Mini Logo
-                    Container(
+                    SizedBox(
                       width: 80,
                       height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF9b3ec7).withOpacity(0.4),
-                            blurRadius: 8,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.asset(
@@ -123,16 +114,17 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    // const SizedBox(width: 12),
-                    // const Text(
-                    //   'الاتحاد',
-                    //   style: TextStyle(
-                    //     fontSize: 20,
-                    //     fontWeight: FontWeight.bold,
-                    //     color: Colors.white,
-                    //     letterSpacing: 0.5,
-                    //   ),
-                    // ),
+                    Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        _scrollController.animateTo(
+                          0,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      icon: Icon(Icons.close, color: Colors.white),
+                    ),
                   ],
                 ),
               ),
@@ -156,72 +148,30 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                   child: Opacity(
                     opacity: 1 - _scrollProgress,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 16,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // Editor Info on the left
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'رئيس التحرير',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.white.withOpacity(0.7),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                const Text(
-                                  'احمد الخطيب',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 0.5,
-                                  ),
-                                ),
-                              ],
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Container(
+                              width: 280,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Image.asset(
+                                ImagesPaths.logoImage,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                          // Logo on the right
-                          Container(
-                            width: 200,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(
-                                    0xFF9b3ec7,
-                                  ).withOpacity(0.3),
-                                  blurRadius: 20,
-                                  spreadRadius: 3,
-                                ),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.white.withOpacity(0.2),
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Image.asset(
-                                  ImagesPaths.logoImage,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                          Text(
+                            "رئيس التحرير : احمد الخطيب",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
                         ],
@@ -233,64 +183,24 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
             ),
           ),
 
-          // Horizontal Category Slider
+          // Category Slider - Now using the reusable component
           SliverToBoxAdapter(
-            child: Container(
-              decoration: BoxDecoration(
-                color:
-                    isDark ? const Color(0xFF000014) : const Color(0xFFFAFAFA),
-                boxShadow: [
-                  BoxShadow(
-                    color:
-                        isDark
-                            ? Colors.black.withOpacity(0.2)
-                            : Colors.black.withOpacity(0.05),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+            child: HorizontalCategorySlider(
+              categories: _categories,
+              selectedCategory: _selectedCategory,
+              isDark: isDark,
+              showInContainer: true,
+              onCategorySelected: (category) {
+                setState(() {
+                  _selectedCategory = category;
+                });
+                // Navigate to category page
+                Navigator.of(context, rootNavigator: true).push(
+                  MaterialPageRoute(
+                    builder: (context) => CategoryNews(categoryName: category),
                   ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    height: 50,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: _categories.length,
-                      itemBuilder: (context, index) {
-                        final category = _categories[index];
-                        final isSelected = category == _selectedCategory;
-
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: _CategoryChip(
-                            label: category,
-                            isSelected: isSelected,
-                            isDark: isDark,
-                            onTap: () {
-                              setState(() {
-                                _selectedCategory = category;
-                              });
-                              // Navigate to category page
-                              Navigator.of(context, rootNavigator: true).push(
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) =>
-                                          CategoryNews(categoryName: category),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              ),
+                );
+              },
             ),
           ),
 
@@ -415,97 +325,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
           onTap: () {},
         );
       },
-    );
-  }
-}
-
-// Category Chip Widget
-class _CategoryChip extends StatefulWidget {
-  final String label;
-  final bool isSelected;
-  final bool isDark;
-  final VoidCallback onTap;
-
-  const _CategoryChip({
-    required this.label,
-    required this.isSelected,
-    required this.isDark,
-    required this.onTap,
-  });
-
-  @override
-  State<_CategoryChip> createState() => _CategoryChipState();
-}
-
-class _CategoryChipState extends State<_CategoryChip> {
-  bool _isPressed = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapUp: (_) {
-        setState(() => _isPressed = false);
-        widget.onTap();
-      },
-      onTapCancel: () => setState(() => _isPressed = false),
-      child: AnimatedScale(
-        scale: _isPressed ? 0.95 : 1.0,
-        duration: const Duration(milliseconds: 100),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          decoration: BoxDecoration(
-            color:
-                widget.isSelected
-                    ? const Color(0xFFef4444)
-                    : (widget.isDark ? const Color(0xFF1a1424) : Colors.white),
-            borderRadius: BorderRadius.circular(25),
-            border: Border.all(
-              color:
-                  widget.isSelected
-                      ? const Color(0xFFef4444)
-                      : (widget.isDark
-                          ? const Color(0xFF271C2E).withOpacity(0.5)
-                          : const Color(0xFF271C2E).withOpacity(0.2)),
-              width: 2,
-            ),
-            boxShadow:
-                widget.isSelected
-                    ? [
-                      BoxShadow(
-                        color: const Color(0xFFef4444).withOpacity(0.4),
-                        blurRadius: 12,
-                        offset: const Offset(0, 3),
-                      ),
-                    ]
-                    : [
-                      BoxShadow(
-                        color:
-                            widget.isDark
-                                ? const Color(0xFF000014).withOpacity(0.3)
-                                : const Color(0xFF000014).withOpacity(0.08),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-          ),
-          child: Text(
-            widget.label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color:
-                  widget.isSelected
-                      ? Colors.white
-                      : (widget.isDark
-                          ? const Color(0xFFe8e8e8)
-                          : const Color(0xFF0d0316)),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

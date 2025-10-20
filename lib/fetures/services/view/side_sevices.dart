@@ -45,9 +45,7 @@ class _SideServicesState extends State<SideServices> {
           children: [
             // Gold Price Chart Section
             GoldChartSection(theme: theme, isDark: isDark),
-
             const SizedBox(height: 24),
-
             // Gold Calculator Section
             GoldCalculatorSection(
               theme: theme,
@@ -58,9 +56,7 @@ class _SideServicesState extends State<SideServices> {
               onWeightChanged: updateGoldWeight,
               onCaratChanged: updateSelectedCarat,
             ),
-
             const SizedBox(height: 32),
-
             // Services Grid Section
             ServicesGridSection(theme: theme, isDark: isDark),
           ],

@@ -4,6 +4,7 @@ import 'package:el_etehad/fetures/home/view/home_view.dart';
 import 'package:el_etehad/fetures/search/view/search_view.dart';
 import 'package:el_etehad/fetures/services/view/side_sevices.dart';
 import 'package:el_etehad/fetures/settings/view/settings_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
@@ -101,7 +102,7 @@ class _NavViewState extends State<NavView> with TickerProviderStateMixin {
       ),
 
       _buildNavBarItem(
-        icon: Icons.gamepad,
+        icon: CupertinoIcons.game_controller,
         title: "الالعاب",
         activeColor: activeColor,
         inactiveColor: inactiveColor,
@@ -110,8 +111,8 @@ class _NavViewState extends State<NavView> with TickerProviderStateMixin {
       ),
 
       _buildNavBarItem(
-        icon: Icons.bookmark_outline,
-        title: "الإعدادات",
+        icon: CupertinoIcons.chart_bar,
+        title: "خدمات",
         activeColor: activeColor,
         inactiveColor: inactiveColor,
         textColor: textColor,
@@ -155,7 +156,18 @@ class _NavViewState extends State<NavView> with TickerProviderStateMixin {
                           ))
                   : 1.0;
 
-          return Transform.scale(scale: scale, child: Icon(icon, size: 26));
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Transform.scale(
+                  scale: scale,
+                  child: Icon(icon, size: 26),
+                ),
+              ),
+            ],
+          );
         },
       ),
       activeColorPrimary: activeColor,

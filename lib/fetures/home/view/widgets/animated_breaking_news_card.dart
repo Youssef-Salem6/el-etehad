@@ -63,7 +63,7 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
       child: ScaleTransition(
         scale: _scaleAnimation,
         child: Container(
-          width: 240,
+          width: 260,
           margin: const EdgeInsets.only(left: 16, bottom: 2),
           decoration: BoxDecoration(
             image: const DecorationImage(
@@ -81,42 +81,7 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
               borderRadius: BorderRadius.circular(16),
               onTap: widget.onTap,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.7),
-                                blurRadius: 2,
-                                offset: const Offset(0, 5),
-                              ),
-                            ],
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Text(
-                            'عاجل',
-                            style: TextStyle(
-                              color: Color(0xFF271C2E),
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
                   const Spacer(),
                   Container(
                     decoration: BoxDecoration(
@@ -150,7 +115,7 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
                                     "سياسه",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 16,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -167,7 +132,7 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
                                     style: TextStyle(
                                       fontWeight: FontWeight.w800,
                                       color: Colors.white,
-                                      fontSize: 14,
+                                      fontSize: 16,
                                     ),
                                   ),
                                 ),
