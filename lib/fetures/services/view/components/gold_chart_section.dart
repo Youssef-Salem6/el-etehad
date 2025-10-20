@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'gold_chart_painter.dart';
 
 class GoldChartSection extends StatelessWidget {
@@ -96,18 +97,31 @@ class GoldChartSection extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Gold prices summary
-          Row(
+          Column(
             children: [
-              Expanded(
-                child: _buildPriceCard('عيار 24', '3500', theme, isDark),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildPriceCard('عيار 24', '3500', theme, isDark),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _buildPriceCard('عيار 21', '3062', theme, isDark),
+                  ),
+                ],
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildPriceCard('عيار 21', '3062', theme, isDark),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildPriceCard('عيار 18', '2625', theme, isDark),
+              Gap(10),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildPriceCard('عيار 18', '2625', theme, isDark),
+                  ),
+                  const SizedBox(width: 12),
+
+                  Expanded(
+                    child: _buildPriceCard('عيار 14', '2200', theme, isDark),
+                  ),
+                ],
               ),
             ],
           ),

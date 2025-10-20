@@ -1,5 +1,6 @@
 import 'package:el_etehad/fetures/services/view/current_calc_view.dart';
 import 'package:el_etehad/fetures/services/view/fuel_price_view.dart';
+import 'package:el_etehad/fetures/services/view/important_numbers_view.dart';
 import 'package:flutter/material.dart';
 
 class ServicesGridSection extends StatelessWidget {
@@ -109,7 +110,9 @@ class ServicesGridSection extends StatelessWidget {
             rootNavigator: false,
           ).push(MaterialPageRoute(builder: (context) => FuelPriceView()));
         } else if (service.icon == Icons.phone) {
-          // Handle important numbers navigation
+          Navigator.of(context, rootNavigator: false).push(
+            MaterialPageRoute(builder: (context) => ImportantNumbersView()),
+          );
         } else if (service.icon == Icons.local_pharmacy) {
           // Handle pharmacies navigation
         }

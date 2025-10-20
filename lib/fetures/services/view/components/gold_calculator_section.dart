@@ -83,6 +83,8 @@ class GoldCalculatorSection extends StatelessWidget {
               _buildCaratChip('21', theme, isDark),
               const SizedBox(width: 8),
               _buildCaratChip('18', theme, isDark),
+              const SizedBox(width: 8),
+              _buildCaratChip('14', theme, isDark),
             ],
           ),
 

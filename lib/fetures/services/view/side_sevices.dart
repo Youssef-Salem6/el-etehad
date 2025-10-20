@@ -29,6 +29,7 @@ class _SideServicesState extends State<SideServices> {
       if (carat == '24') pricePerGram = 3500;
       if (carat == '21') pricePerGram = 3062;
       if (carat == '18') pricePerGram = 2625;
+      if (carat == '14') pricePerGram = 2200;
     });
   }
 
