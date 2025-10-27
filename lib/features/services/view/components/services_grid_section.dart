@@ -1,7 +1,11 @@
+import 'package:el_etehad/core/manager/getLocationCubit/get_location_cubit.dart';
+import 'package:el_etehad/features/services/manager/prayer_time/prayer_time_cubit.dart';
 import 'package:el_etehad/features/services/view/current_calc_view.dart';
 import 'package:el_etehad/features/services/view/fuel_price_view.dart';
 import 'package:el_etehad/features/services/view/important_numbers_view.dart';
+import 'package:el_etehad/features/services/view/prayer_time.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ServicesGridSection extends StatelessWidget {
   final ThemeData theme;
@@ -67,10 +71,16 @@ class ServicesGridSection extends StatelessWidget {
         color: const Color(0xFF8b5cf6),
       ),
       ServiceItem(
-        icon: Icons.local_pharmacy,
-        title: 'صيدليات',
-        subtitle: 'صيدليات الخدمة',
-        color: const Color(0xFF06b6d4),
+        icon: Icons.mosque,
+        title: 'مواقيت الصلاه',
+        subtitle: 'موعد الصلاوات',
+        color: const Color.fromARGB(255, 6, 212, 54),
+      ),
+      ServiceItem(
+        icon: Icons.sunny,
+        title: 'الطقس',
+        subtitle: 'درجه حراره اليوم',
+        color: const Color.fromARGB(255, 212, 6, 105),
       ),
     ];
 
@@ -113,8 +123,21 @@ class ServicesGridSection extends StatelessWidget {
           Navigator.of(context, rootNavigator: false).push(
             MaterialPageRoute(builder: (context) => ImportantNumbersView()),
           );
-        } else if (service.icon == Icons.local_pharmacy) {
-          // Handle pharmacies navigation
+        } else if (service.icon == Icons.mosque) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return BlocProvider(
+                  create: (context) => PrayerTimeCubit(),
+                  child: BlocProvider(
+                    create: (context) => GetLocationCubit(),
+                    child: const PrayerTimePage(),
+                  ),
+                );
+              },
+            ),
+          );
         }
       },
       child: Container(
