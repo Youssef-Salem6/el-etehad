@@ -1,10 +1,13 @@
+import 'package:el_etehad/features/news/manager/cubit/get_news_details_cubit.dart';
 import 'package:el_etehad/features/news/view/widgets/bottom_actions.dart';
 import 'package:el_etehad/features/news/view/widgets/news_app_bar.dart';
 import 'package:el_etehad/features/news/view/widgets/news_content.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NewDetails extends StatefulWidget {
-  const NewDetails({super.key});
+  final int id;
+  const NewDetails({super.key, required this.id});
 
   @override
   State<NewDetails> createState() => _NewDetailsState();
@@ -16,7 +19,7 @@ class _NewDetailsState extends State<NewDetails> with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late AnimationController _slideController;
 
-  // بيانات الخبر الحقيقية
+  // بيانات الخبر الحقيقية (fallback data)
   final String newsTitle =
       'الذكاء الاصطناعي يحقق طفرة جديدة في مجال الطب بتشخيص الأمراض المبكرة';
   final String newsCategory = 'تكنولوجيا';
@@ -111,6 +114,12 @@ class _NewDetailsState extends State<NewDetails> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
+    // Fetch news details from API
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<GetNewsDetailsCubit>().getNewsDetails(id: widget.id);
+    });
+
     _scrollController.addListener(_scrollListener);
 
     _fadeController = AnimationController(
@@ -144,36 +153,94 @@ class _NewDetailsState extends State<NewDetails> with TickerProviderStateMixin {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          NewsAppBar(
-            scrollController: _scrollController,
-            imageOpacity: _imageOpacity,
-            mainImage: mainImage,
-            theme: theme,
-            onBack: () => Navigator.pop(context),
-          ),
-          SliverToBoxAdapter(
-            child: NewsContent(
-              fadeController: _fadeController,
-              slideController: _slideController,
-              theme: theme,
-              newsCategory: newsCategory,
-              newsTime: newsTime,
-              newsTitle: newsTitle,
-              authorName: authorName,
-              authorRole: authorRole,
-              contentParagraphs: contentParagraphs,
-              imageGallery: imageGallery,
-              popularPeople: popularPeople,
-              relatedNews: relatedNews,
-            ),
-          ),
-        ],
+      body: BlocBuilder<GetNewsDetailsCubit, GetNewsDetailsState>(
+        builder: (context, state) {
+          // Loading state
+          if (state is GetNewsDetailsLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          // Error state
+          if (state is GetNewsDetailsFailure) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 60, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text(
+                    'خطأ في تحميل البيانات',
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    state.message,
+                    style: theme.textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      context.read<GetNewsDetailsCubit>().getNewsDetails(
+                        id: widget.id,
+                      );
+                    },
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('إعادة المحاولة'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          // Success state
+          if (state is GetNewsDetailsSuccess) {
+            final newsDetailsModel = state.newsDetailsModel;
+
+            return CustomScrollView(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                NewsAppBar(
+                  scrollController: _scrollController,
+                  imageOpacity: _imageOpacity,
+                  mainImage: mainImage,
+                  theme: theme,
+                  onBack: () => Navigator.pop(context),
+                ),
+                SliverToBoxAdapter(
+                  child: NewsContent(
+                    fadeController: _fadeController,
+                    slideController: _slideController,
+                    theme: theme,
+                    newsTime: newsTime,
+                    newsTitle: newsTitle,
+                    authorRole: authorRole,
+                    contentParagraphs: contentParagraphs,
+                    imageGallery: imageGallery,
+                    popularPeople: popularPeople,
+                    relatedNews: relatedNews,
+                    newsDetailsModel: newsDetailsModel,
+                  ),
+                ),
+              ],
+            );
+          }
+
+          // Initial state (also show loading)
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
-      bottomNavigationBar: BottomActions(theme: theme),
+      bottomNavigationBar:
+          BlocBuilder<GetNewsDetailsCubit, GetNewsDetailsState>(
+            builder: (context, state) {
+              // Only show bottom actions when success
+              if (state is GetNewsDetailsSuccess) {
+                return BottomActions(theme: theme);
+              }
+              return const SizedBox.shrink();
+            },
+          ),
     );
   }
 }

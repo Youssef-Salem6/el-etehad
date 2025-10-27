@@ -1,18 +1,19 @@
+import 'package:el_etehad/features/news/models/news_details_model.dart';
 import 'package:el_etehad/features/news/view/widgets/animated_widgets.dart';
 import 'package:el_etehad/features/news/view/widgets/image_gallery.dart';
 import 'package:el_etehad/features/news/view/widgets/popular_people.dart';
 import 'package:el_etehad/features/news/view/widgets/related_news.dart';
 import 'package:flutter/material.dart';
 
-
 class NewsContent extends StatelessWidget {
+  final NewsDetailsModel newsDetailsModel;
   final AnimationController fadeController;
   final AnimationController slideController;
   final ThemeData theme;
-  final String newsCategory;
+  // final String newsCategory;
   final String newsTime;
   final String newsTitle;
-  final String authorName;
+  // final String authorName;
   final String authorRole;
   final List<String> contentParagraphs;
   final List<Map<String, String>> imageGallery;
@@ -24,15 +25,16 @@ class NewsContent extends StatelessWidget {
     required this.fadeController,
     required this.slideController,
     required this.theme,
-    required this.newsCategory,
+    // required this.newsCategory,
     required this.newsTime,
     required this.newsTitle,
-    required this.authorName,
+    // required this.authorName,
     required this.authorRole,
     required this.contentParagraphs,
     required this.imageGallery,
     required this.popularPeople,
     required this.relatedNews,
+    required this.newsDetailsModel,
   });
 
   @override
@@ -68,24 +70,18 @@ class NewsContent extends StatelessWidget {
           begin: const Offset(-0.5, 0),
           end: Offset.zero,
         ).animate(
-          CurvedAnimation(
-            parent: slideController,
-            curve: Curves.easeOut,
-          ),
+          CurvedAnimation(parent: slideController, curve: Curves.easeOut),
         ),
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 6,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: theme.colorScheme.secondary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                newsCategory,
+                newsDetailsModel.section ?? "قسم",
                 style: TextStyle(
                   color: theme.colorScheme.secondary,
                   fontWeight: FontWeight.bold,
@@ -100,7 +96,10 @@ class NewsContent extends StatelessWidget {
               color: theme.textTheme.bodySmall?.color,
             ),
             const SizedBox(width: 4),
-            Text(newsTime, style: theme.textTheme.bodySmall),
+            Text(
+              newsDetailsModel.publishedAt!,
+              style: theme.textTheme.bodySmall,
+            ),
           ],
         ),
       ),
@@ -115,16 +114,11 @@ class NewsContent extends StatelessWidget {
           begin: const Offset(0.5, 0),
           end: Offset.zero,
         ).animate(
-          CurvedAnimation(
-            parent: slideController,
-            curve: Curves.easeOut,
-          ),
+          CurvedAnimation(parent: slideController, curve: Curves.easeOut),
         ),
         child: Text(
-          newsTitle,
-          style: theme.textTheme.displaySmall?.copyWith(
-            height: 1.4,
-          ),
+          newsDetailsModel.title!,
+          style: theme.textTheme.displaySmall?.copyWith(height: 1.4),
           textAlign: TextAlign.right,
         ),
       ),
@@ -150,22 +144,16 @@ class NewsContent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    authorName,
+                    newsDetailsModel.newsWriterModel!.name ?? "Unknown",
                     style: theme.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    authorRole,
-                    style: theme.textTheme.bodySmall,
-                  ),
+                  Text(authorRole, style: theme.textTheme.bodySmall),
                 ],
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.more_vert),
-              onPressed: () {},
-            ),
+            IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
           ],
         ),
       ),

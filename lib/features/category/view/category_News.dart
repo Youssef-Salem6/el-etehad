@@ -1,4 +1,3 @@
-import 'package:el_etehad/features/news/view/new_details.dart';
 import 'package:flutter/material.dart';
 
 class NewsItem {
@@ -182,10 +181,10 @@ class _CategoryNewsState extends State<CategoryNews>
   Widget _buildNewsCard(BuildContext context, NewsItem news) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => NewDetails()),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => NewDetails()),
+        // );
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),

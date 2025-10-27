@@ -5,8 +5,16 @@ import 'package:gap/gap.dart';
 
 class CardFooter extends StatelessWidget {
   final bool isInsideCard;
+  final String location, day;
+  final bool isUsedAi;
 
-  const CardFooter({super.key, this.isInsideCard = false});
+  const CardFooter({
+    super.key,
+    this.isInsideCard = false,
+    required this.location,
+    required this.day,
+    required this.isUsedAi,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +35,7 @@ class CardFooter extends StatelessWidget {
         Icon(CupertinoIcons.time, color: iconColor, size: 16),
         const Gap(5),
         Text(
-          "السبت",
+          day,
           style: TextStyle(
             color: textColor,
             fontSize: 12,
@@ -38,7 +46,7 @@ class CardFooter extends StatelessWidget {
         Icon(Icons.location_on_outlined, color: iconColor, size: 18),
         const Gap(5),
         Text(
-          "كفر الشيخ",
+          location,
           style: TextStyle(
             color: textColor,
             fontSize: 12,
@@ -46,19 +54,25 @@ class CardFooter extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        Image(
-          image: AssetImage(ImagesPaths.aiIcon),
-          width: 18,
-          color: iconColor,
-          colorBlendMode: BlendMode.srcIn,
+        Visibility(
+          visible: isUsedAi,
+          child: Image(
+            image: AssetImage(ImagesPaths.aiIcon),
+            width: 18,
+            color: iconColor,
+            colorBlendMode: BlendMode.srcIn,
+          ),
         ),
         const Gap(5),
-        Text(
-          "AI",
-          style: TextStyle(
-            color: textColor,
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
+        Visibility(
+          visible: isUsedAi,
+          child: Text(
+            "AI",
+            style: TextStyle(
+              color: textColor,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],

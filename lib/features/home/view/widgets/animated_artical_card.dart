@@ -1,9 +1,11 @@
 import 'package:el_etehad/core/paths/images_paths.dart';
+import 'package:el_etehad/features/home/models/news_model.dart';
 import 'package:el_etehad/features/home/view/widgets/card_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class AnimatedArticleCard extends StatefulWidget {
+  final NewsModel newsModel;
   final int index;
   final String title, description;
   final String category;
@@ -18,6 +20,7 @@ class AnimatedArticleCard extends StatefulWidget {
     required this.readTime,
     this.onTap,
     required this.description,
+    required this.newsModel,
   });
 
   @override
@@ -153,7 +156,12 @@ class _AnimatedArticleCardState extends State<AnimatedArticleCard>
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            CardFooter(isInsideCard: false),
+                            CardFooter(
+                              isInsideCard: false,
+                              location: '',
+                              day: '',
+                              isUsedAi: true,
+                            ),
                           ],
                         ),
                       ),

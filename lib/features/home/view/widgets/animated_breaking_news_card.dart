@@ -1,21 +1,24 @@
+import 'package:el_etehad/core/paths/apis.dart';
 import 'package:el_etehad/core/paths/images_paths.dart';
+import 'package:el_etehad/features/home/models/news_model.dart';
 import 'package:el_etehad/features/home/view/widgets/card_footer.dart';
+import 'package:el_etehad/features/news/manager/cubit/get_news_details_cubit.dart';
+import 'package:el_etehad/features/news/view/new_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class AnimatedBreakingNewsCard extends StatefulWidget {
   final int index;
-  final String title;
   final String time;
-  final VoidCallback? onTap;
+  final NewsModel newsModel;
 
   const AnimatedBreakingNewsCard({
     super.key,
     required this.index,
-    required this.title,
     required this.time,
-    this.onTap,
+    required this.newsModel,
   });
 
   @override
@@ -66,10 +69,8 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
           width: 260,
           margin: const EdgeInsets.only(left: 16, bottom: 2),
           decoration: BoxDecoration(
-            image: const DecorationImage(
-              image: NetworkImage(
-                "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=180",
-              ),
+            image: DecorationImage(
+              image: NetworkImage("$endPoint/${widget.newsModel.image}"),
               fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(12),
@@ -79,7 +80,18 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
             color: Colors.transparent,
             child: InkWell(
               borderRadius: BorderRadius.circular(16),
-              onTap: widget.onTap,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => BlocProvider(
+                          create: (context) => GetNewsDetailsCubit(),
+                          child: NewDetails(id: widget.newsModel.id!),
+                        ),
+                  ),
+                );
+              },
               child: Column(
                 children: [
                   const Spacer(),
@@ -112,7 +124,7 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
                                   ),
                                   Gap(5),
                                   Text(
-                                    "سياسه",
+                                    widget.newsModel.category ?? "قسم",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 12,
@@ -128,7 +140,7 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
                                   child: Text(
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    "ذكاء اصطناعي جديد قادر على تشخيص الأمراض النادرة بدقة تصل إلى 95%",
+                                    widget.newsModel.title ?? "عنوان",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w800,
                                       color: Colors.white,
@@ -139,7 +151,13 @@ class _AnimatedBreakingNewsCardState extends State<AnimatedBreakingNewsCard>
                               ),
                               SizedBox(
                                 width: 220,
-                                child: CardFooter(isInsideCard: true),
+                                child: CardFooter(
+                                  isInsideCard: true,
+                                  location:
+                                      widget.newsModel.location ?? "كفر الشيخ",
+                                  day: widget.newsModel.publishedAt ?? "السبت",
+                                  isUsedAi: widget.newsModel.usedAi ?? false,
+                                ),
                               ),
                             ],
                           ),
