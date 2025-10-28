@@ -43,6 +43,7 @@ dependencies:
   persistent_bottom_nav_bar: ^6.2.1
   shared_preferences: ^2.5.3
   shimmer: ^3.0.0
+  timezone: ^0.10.1
   url_launcher: ^6.3.2
   
 

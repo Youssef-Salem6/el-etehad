@@ -6,6 +6,8 @@ import 'package:el_etehad/features/services/view/fuel_price_view.dart';
 import 'package:el_etehad/features/services/view/important_numbers_view.dart';
 import 'package:el_etehad/features/services/view/prayer_time.dart';
 import 'package:el_etehad/features/services/view/weather_view.dart';
+import 'package:el_etehad/features/services/view/worled_zone_times.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,18 +51,6 @@ class ServicesGridSection extends StatelessWidget {
         color: const Color(0xFF3b82f6),
       ),
       ServiceItem(
-        icon: Icons.train,
-        title: 'مواعيد القطارات',
-        subtitle: 'جداول السكك الحديدية',
-        color: const Color(0xFF10b981),
-      ),
-      ServiceItem(
-        icon: Icons.subway,
-        title: 'مترو الأنفاق',
-        subtitle: 'خطوط ومواعيد المترو',
-        color: const Color(0xFFf59e0b),
-      ),
-      ServiceItem(
         icon: Icons.local_gas_station,
         title: 'أسعار البنزين',
         subtitle: 'أسعار المحروقات',
@@ -83,6 +73,12 @@ class ServicesGridSection extends StatelessWidget {
         title: 'الطقس',
         subtitle: 'درجه حراره اليوم',
         color: const Color.fromARGB(255, 212, 6, 105),
+      ),
+      ServiceItem(
+        icon: CupertinoIcons.clock,
+        title: 'التوقيتات',
+        subtitle: 'التوقيتات العالميه',
+        color: const Color.fromARGB(255, 102, 6, 212),
       ),
     ];
 
@@ -113,8 +109,11 @@ class ServicesGridSection extends StatelessWidget {
             context,
             rootNavigator: false,
           ).push(MaterialPageRoute(builder: (context) => CurrentCalcView()));
-        } else if (service.icon == Icons.train) {
-          // Handle train schedules navigation
+        } else if (service.icon == CupertinoIcons.clock) {
+          Navigator.of(
+            context,
+            rootNavigator: false,
+          ).push(MaterialPageRoute(builder: (context) => WorldZoneTimes()));
         } else if (service.icon == Icons.sunny) {
           Navigator.push(
             context,
