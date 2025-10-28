@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'components/gold_chart_section.dart';
-import 'components/gold_calculator_section.dart';
-import 'components/services_grid_section.dart';
+import 'components/side_services_components/gold_chart_section.dart';
+import 'components/side_services_components/gold_calculator_section.dart';
+import 'components/side_services_components/services_grid_section.dart';
 
 class SideServices extends StatefulWidget {
   const SideServices({super.key});

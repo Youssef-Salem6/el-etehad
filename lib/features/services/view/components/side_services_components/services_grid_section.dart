@@ -1,9 +1,11 @@
 import 'package:el_etehad/core/manager/getLocationCubit/get_location_cubit.dart';
 import 'package:el_etehad/features/services/manager/prayer_time/prayer_time_cubit.dart';
+import 'package:el_etehad/features/services/manager/weather_cubit/weather_cubit.dart';
 import 'package:el_etehad/features/services/view/current_calc_view.dart';
 import 'package:el_etehad/features/services/view/fuel_price_view.dart';
 import 'package:el_etehad/features/services/view/important_numbers_view.dart';
 import 'package:el_etehad/features/services/view/prayer_time.dart';
+import 'package:el_etehad/features/services/view/weather_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -113,7 +115,21 @@ class ServicesGridSection extends StatelessWidget {
           ).push(MaterialPageRoute(builder: (context) => CurrentCalcView()));
         } else if (service.icon == Icons.train) {
           // Handle train schedules navigation
-        } else if (service.icon == Icons.subway) {
+        } else if (service.icon == Icons.sunny) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return BlocProvider(
+                  create: (context) => WeatherCubit(),
+                  child: BlocProvider(
+                    create: (context) => GetLocationCubit(),
+                    child: const WeatherView(),
+                  ),
+                );
+              },
+            ),
+          );
         } else if (service.icon == Icons.local_gas_station) {
           Navigator.of(
             context,

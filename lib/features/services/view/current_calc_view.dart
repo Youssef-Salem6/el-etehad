@@ -1,9 +1,9 @@
 // current_calc_view.dart
 
 import 'package:el_etehad/features/services/manager/currentCubit/get_current_cubit.dart';
-import 'package:el_etehad/features/services/view/components/CurrencyGridWidget.dart';
-import 'package:el_etehad/features/services/view/components/currency_converter_widget.dart';
-import 'package:el_etehad/features/services/view/components/shimmer_loading_widget.dart';
+import 'package:el_etehad/features/services/view/components/current_widget/CurrencyGridWidget.dart';
+import 'package:el_etehad/features/services/view/components/current_widget/currency_converter_widget.dart';
+import 'package:el_etehad/features/services/view/components/current_widget/shimmer_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

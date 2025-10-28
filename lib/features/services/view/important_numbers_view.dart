@@ -1,9 +1,9 @@
 import 'package:el_etehad/features/services/models/emergency_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'components/emergency_banner.dart';
-import 'components/numbers_grid_section.dart';
-import 'components/numbers_list_section.dart';
+import 'components/importent_number_component/emergency_banner.dart';
+import 'components/importent_number_component/numbers_grid_section.dart';
+import 'components/importent_number_component/numbers_list_section.dart';
 
 
 class ImportantNumbersView extends StatefulWidget {

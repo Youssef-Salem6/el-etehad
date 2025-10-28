@@ -279,34 +279,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                               );
                             },
                           ),
-                          // AnimatedPollWidget(
-                          //   poll: Poll(
-                          //     question: "ايه رأيك في السيسي",
-                          //     options: [
-                          //       PollOption(
-                          //         color: Colors.green,
-                          //         text: "طرش",
-                          //         votes: 120,
-                          //       ),
-                          //       PollOption(
-                          //         color: Colors.yellow,
-                          //         text: "جامد",
-                          //         votes: 120,
-                          //       ),
-                          //       PollOption(
-                          //         color: Colors.lightBlue,
-                          //         text: "رايق",
-                          //         votes: 120,
-                          //       ),
-                          //       PollOption(
-                          //         color: Colors.purpleAccent,
-                          //         text: "فريد من نوعه",
-                          //         votes: 120,
-                          //       ),
-                          //     ],
-                          //     totalVotes: 550,
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),
