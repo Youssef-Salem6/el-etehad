@@ -342,10 +342,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       itemBuilder: (context, index) {
         return AnimatedArticleCard(
           index: index,
-          description:
-              "أعلنت مجموعة من الباحثين في جامعة ستانفورد عن تطوير نظام ذكاء اصطناعي جديد قادر على تشخيص الأمراض النادرة بدقة تصل إلى 95%، وهو ما يمثل قفزة نوعية في عالم الطب الرقمي.",
-          title:
-              'الذكاء الاصطناعي يحقق طفرة جديدة في مجال الطب بتشخيص الأمراض المبكرة',
           category: 'تكنولوجيا',
           readTime: '${index + 3} دقائق',
           onTap: () {},

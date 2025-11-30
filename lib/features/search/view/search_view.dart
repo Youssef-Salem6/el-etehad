@@ -1,4 +1,6 @@
+import 'package:el_etehad/features/search/manager/artical_search/artical_search_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -100,42 +102,6 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
         'category': 'تكنولوجيا',
       },
     ],
-    'اقتصاد': [
-      {
-        'title': 'البورصة المصرية تسجل ارتفاعاً قياسياً',
-        'source': 'الاقتصادية',
-        'time': 'منذ 3 ساعات',
-        'image': '📊',
-        'category': 'اقتصاد',
-      },
-    ],
-    'صحة': [
-      {
-        'title': 'دراسة جديدة عن فوائد المشي اليومي',
-        'source': 'صحتك',
-        'time': 'منذ 5 ساعات',
-        'image': '🏃',
-        'category': 'صحة',
-      },
-    ],
-    'ثقافة': [
-      {
-        'title': 'معرض الكتاب الدولي يفتح أبوابه',
-        'source': 'الثقافة اليوم',
-        'time': 'منذ 4 ساعات',
-        'image': '📚',
-        'category': 'ثقافة',
-      },
-    ],
-    'فن': [
-      {
-        'title': 'فيلم عربي يفوز بجائزة عالمية',
-        'source': 'فن',
-        'time': 'منذ 6 ساعات',
-        'image': '🎬',
-        'category': 'فن',
-      },
-    ],
   };
 
   @override
@@ -146,6 +112,13 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
       setState(() {
         _isSearching = _searchController.text.isNotEmpty;
       });
+
+      // Trigger search when user types
+      if (_searchController.text.isNotEmpty) {
+        context.read<ArticalSearchCubit>().search(_searchController.text);
+      } else {
+        context.read<ArticalSearchCubit>().clearSearch();
+      }
     });
   }
 
@@ -180,60 +153,15 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
             ),
           ),
 
-          // Category Tabs
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: _SliverAppBarDelegate(
-              TabBar(
-                controller: _tabController,
-                isScrollable: true,
-                indicator: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      theme.colorScheme.primary,
-                      theme.colorScheme.secondary,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                indicatorSize: TabBarIndicatorSize.label,
-                dividerColor: Colors.transparent,
-                labelColor: Colors.white,
-                unselectedLabelColor: theme.textTheme.bodyMedium?.color,
-                labelStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-                labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-                tabs:
-                    categories.map((category) {
-                      return Tab(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
-                          child: Text(category),
-                        ),
-                      );
-                    }).toList(),
-              ),
-              theme.scaffoldBackgroundColor,
-            ),
-          ),
-
-          // News Cards
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height - 200,
-              child: TabBarView(
-                controller: _tabController,
-                children:
-                    categories.map((category) {
-                      return _buildNewsList(category);
-                    }).toList(),
-              ),
-            ),
+          // Show search results or category tabs
+          BlocBuilder<ArticalSearchCubit, ArticalSearchState>(
+            builder: (context, state) {
+              if (_isSearching) {
+                return _buildSearchResults(state);
+              } else {
+                return _buildCategoryContent();
+              }
+            },
           ),
         ],
       ),
@@ -288,6 +216,144 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSearchResults(ArticalSearchState state) {
+    if (state is ArticalSearchLoading) {
+      return SliverFillRemaining(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'جاري البحث...',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (state is ArticalSearchFailure) {
+      return SliverFillRemaining(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 64,
+                color: Colors.red.withOpacity(0.6),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                state.error,
+                style: Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: () {
+                  if (_searchController.text.isNotEmpty) {
+                    context.read<ArticalSearchCubit>().search(
+                      _searchController.text,
+                    );
+                  }
+                },
+                icon: const Icon(Icons.refresh),
+                label: const Text('إعادة المحاولة'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (state is ArticalSearchSuccess) {
+      if (state.data.isEmpty) {
+        return SliverFillRemaining(child: _buildEmptyState());
+      }
+
+      return SliverList(
+        delegate: SliverChildBuilderDelegate((context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: _buildNewsCard(state.data[index], index),
+          );
+        }, childCount: state.data.length),
+      );
+    }
+
+    return const SliverToBoxAdapter(child: SizedBox.shrink());
+  }
+
+  Widget _buildCategoryContent() {
+    final theme = Theme.of(context);
+
+    return SliverMainAxisGroup(
+      slivers: [
+        // Category Tabs
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: _SliverAppBarDelegate(
+            TabBar(
+              controller: _tabController,
+              isScrollable: true,
+              indicator: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    theme.colorScheme.primary,
+                    theme.colorScheme.secondary,
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              indicatorSize: TabBarIndicatorSize.label,
+              dividerColor: Colors.transparent,
+              labelColor: Colors.white,
+              unselectedLabelColor: theme.textTheme.bodyMedium?.color,
+              labelStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+              labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+              tabs:
+                  categories.map((category) {
+                    return Tab(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        child: Text(category),
+                      ),
+                    );
+                  }).toList(),
+            ),
+            theme.scaffoldBackgroundColor,
+          ),
+        ),
+
+        // News Cards
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height - 200,
+            child: TabBarView(
+              controller: _tabController,
+              children:
+                  categories.map((category) {
+                    return _buildNewsList(category);
+                  }).toList(),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -367,10 +433,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
-                        child: Text(
-                          news['image'],
-                          style: const TextStyle(fontSize: 36),
-                        ),
+                        child: Text('📰', style: const TextStyle(fontSize: 36)),
                       ),
                     ),
                   ),
@@ -381,40 +444,43 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Category Badge
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                theme.colorScheme.primary.withOpacity(0.2),
-                                theme.colorScheme.secondary.withOpacity(0.2),
-                              ],
+                        if (news['category'] != null)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
                             ),
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(
-                              color: theme.colorScheme.primary.withOpacity(0.3),
-                              width: 1,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  theme.colorScheme.primary.withOpacity(0.2),
+                                  theme.colorScheme.secondary.withOpacity(0.2),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: theme.colorScheme.primary.withOpacity(
+                                  0.3,
+                                ),
+                                width: 1,
+                              ),
+                            ),
+                            child: Text(
+                              news['category'],
+                              style: TextStyle(
+                                color:
+                                    isDark
+                                        ? theme.colorScheme.secondary
+                                        : theme.colorScheme.primary,
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                          child: Text(
-                            news['category'],
-                            style: TextStyle(
-                              color:
-                                  isDark
-                                      ? theme.colorScheme.secondary
-                                      : theme.colorScheme.primary,
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
                         const SizedBox(height: 8),
                         // Title
                         Text(
-                          news['title'],
+                          news['title'] ?? '',
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                             height: 1.3,
@@ -433,7 +499,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              news['time'],
+                              news['time'] ?? '',
                               style: theme.textTheme.bodySmall,
                             ),
                             const SizedBox(width: 12),
@@ -445,7 +511,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                             const SizedBox(width: 4),
                             Flexible(
                               child: Text(
-                                news['source'],
+                                news['source'] ?? '',
                                 style: theme.textTheme.bodySmall,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -510,9 +576,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
             ),
           ),
           const SizedBox(height: 24),
-          Text('لا توجد أخبار', style: theme.textTheme.headlineMedium),
+          Text('لا توجد نتائج', style: theme.textTheme.headlineMedium),
           const SizedBox(height: 8),
-          Text('جرب البحث في فئة أخرى', style: theme.textTheme.bodyMedium),
+          Text('جرب البحث بكلمات أخرى', style: theme.textTheme.bodyMedium),
         ],
       ),
     );

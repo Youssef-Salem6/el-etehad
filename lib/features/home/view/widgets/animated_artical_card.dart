@@ -7,7 +7,6 @@ import 'package:gap/gap.dart';
 class AnimatedArticleCard extends StatefulWidget {
   final NewsModel newsModel;
   final int index;
-  final String title, description;
   final String category;
   final String readTime;
   final VoidCallback? onTap;
@@ -15,11 +14,9 @@ class AnimatedArticleCard extends StatefulWidget {
   const AnimatedArticleCard({
     super.key,
     required this.index,
-    required this.title,
     required this.category,
     required this.readTime,
     this.onTap,
-    required this.description,
     required this.newsModel,
   });
 
@@ -88,7 +85,7 @@ class _AnimatedArticleCardState extends State<AnimatedArticleCard>
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: NetworkImage(
-                            "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=400&q=80",
+                            "https://alithad.corpintech.com/storage/images/medium/2025/11/6928607df13155357.webp",
                           ),
                           fit: BoxFit.cover,
                         ),
@@ -147,7 +144,7 @@ class _AnimatedArticleCardState extends State<AnimatedArticleCard>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.title,
+                              widget.newsModel.title ?? "",
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,

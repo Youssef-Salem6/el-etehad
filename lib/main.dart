@@ -4,6 +4,7 @@ import 'package:el_etehad/core/view/nav_view.dart';
 import 'package:el_etehad/features/home/manager/homeData/get_home_data_cubit.dart';
 import 'package:el_etehad/features/news/manager/cubit/get_news_details_cubit.dart';
 import 'package:el_etehad/features/polls/manager/cubit/get_all_polls_cubit.dart';
+import 'package:el_etehad/features/search/manager/artical_search/artical_search_cubit.dart';
 import 'package:el_etehad/features/services/manager/currentCubit/get_current_cubit.dart';
 
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => GetHomeDataCubit()),
         BlocProvider(create: (context) => GetNewsDetailsCubit()),
         BlocProvider(create: (context) => GetAllPollsCubit()),
+        BlocProvider(create: (context) => ArticalSearchCubit()),
       ],
       child: BlocBuilder<ChangeThemeCubit, ChangeThemeState>(
         builder: (context, state) {

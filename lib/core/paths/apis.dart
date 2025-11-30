@@ -10,3 +10,6 @@ String getNewsDetailsUrl = "$endPoint/articles";
 
 //get all polls
 String getAllPollsUrl = "$endPoint/votes";
+
+//search artical
+String searchArticalUrl = "$endPoint/articles?search";

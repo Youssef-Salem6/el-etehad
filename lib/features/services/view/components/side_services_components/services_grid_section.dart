@@ -1,6 +1,7 @@
 import 'package:el_etehad/core/manager/getLocationCubit/get_location_cubit.dart';
 import 'package:el_etehad/features/services/manager/prayer_time/prayer_time_cubit.dart';
 import 'package:el_etehad/features/services/manager/weather_cubit/weather_cubit.dart';
+import 'package:el_etehad/features/services/view/car_price_view.dart';
 import 'package:el_etehad/features/services/view/current_calc_view.dart';
 import 'package:el_etehad/features/services/view/fuel_price_view.dart';
 import 'package:el_etehad/features/services/view/important_numbers_view.dart';
@@ -80,6 +81,12 @@ class ServicesGridSection extends StatelessWidget {
         subtitle: 'التوقيتات العالميه',
         color: const Color.fromARGB(255, 102, 6, 212),
       ),
+      ServiceItem(
+        icon: CupertinoIcons.car,
+        title: 'السيارات',
+        subtitle: 'اسعار السيارات',
+        color: const Color.fromARGB(255, 102, 6, 212),
+      ),
     ];
 
     return Padding(
@@ -129,6 +136,11 @@ class ServicesGridSection extends StatelessWidget {
               },
             ),
           );
+        } else if (service.icon == CupertinoIcons.car) {
+          Navigator.of(
+            context,
+            rootNavigator: false,
+          ).push(MaterialPageRoute(builder: (context) => CarPriceView()));
         } else if (service.icon == Icons.local_gas_station) {
           Navigator.of(
             context,
