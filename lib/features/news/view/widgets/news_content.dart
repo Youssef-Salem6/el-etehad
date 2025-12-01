@@ -4,16 +4,15 @@ import 'package:el_etehad/features/news/view/widgets/image_gallery.dart';
 import 'package:el_etehad/features/news/view/widgets/popular_people.dart';
 import 'package:el_etehad/features/news/view/widgets/related_news.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class NewsContent extends StatelessWidget {
   final NewsDetailsModel newsDetailsModel;
   final AnimationController fadeController;
   final AnimationController slideController;
   final ThemeData theme;
-  // final String newsCategory;
   final String newsTime;
   final String newsTitle;
-  // final String authorName;
   final String authorRole;
   final List<String> contentParagraphs;
   final List<Map<String, String>> imageGallery;
@@ -25,10 +24,8 @@ class NewsContent extends StatelessWidget {
     required this.fadeController,
     required this.slideController,
     required this.theme,
-    // required this.newsCategory,
     required this.newsTime,
     required this.newsTitle,
-    // required this.authorName,
     required this.authorRole,
     required this.contentParagraphs,
     required this.imageGallery,
@@ -81,7 +78,7 @@ class NewsContent extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                newsDetailsModel.section ?? "قسم",
+                newsDetailsModel.sectionModel!.title ?? "قسم",
                 style: TextStyle(
                   color: theme.colorScheme.secondary,
                   fontWeight: FontWeight.bold,
@@ -166,15 +163,42 @@ class NewsContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(
-          contentParagraphs.length,
+          1,
           (index) => Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: AnimatedParagraph(
               delay: index * 200,
-              child: Text(
-                contentParagraphs[index],
-                style: theme.textTheme.bodyLarge?.copyWith(height: 1.8),
-                textAlign: TextAlign.right,
+              child: Html(
+                data: newsDetailsModel.body ?? '',
+                style: {
+                  // تخصيص أنماط النص
+                  "body": Style(
+                    textAlign: TextAlign.right,
+                    lineHeight: const LineHeight(1.8),
+                    fontSize: FontSize(16.0),
+                    fontFamily: theme.textTheme.bodyLarge?.fontFamily,
+                    color: theme.textTheme.bodyLarge?.color,
+                  ),
+                  "p": Style(
+                    textAlign: TextAlign.right,
+                    lineHeight: const LineHeight(1.8),
+                  ),
+                  "h1": Style(
+                    textAlign: TextAlign.right,
+                    fontSize: FontSize(24.0),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  "h2": Style(
+                    textAlign: TextAlign.right,
+                    fontSize: FontSize(20.0),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  "h3": Style(
+                    textAlign: TextAlign.right,
+                    fontSize: FontSize(18.0),
+                    fontWeight: FontWeight.bold,
+                  ),
+                },
               ),
             ),
           ),

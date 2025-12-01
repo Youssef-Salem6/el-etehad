@@ -7,6 +7,7 @@ import 'package:el_etehad/features/home/view/widgets/animated_artical_card.dart'
 import 'package:el_etehad/features/home/view/widgets/animated_breaking_news_card.dart';
 import 'package:el_etehad/features/home/view/widgets/animated_video_card.dart';
 import 'package:el_etehad/features/home/view/widgets/section_title.dart';
+import 'package:el_etehad/features/news/view/all_news_view.dart';
 // import 'package:el_etehad/features/home/view/widgets/voting_component.dart';
 import 'package:el_etehad/features/polls/view/poll_view.dart';
 import 'package:flutter/material.dart';
@@ -260,7 +261,20 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                             title: 'مقالات مميزة',
                             icon: Icons.article_outlined,
                             color: Colors.orange,
-                            onMorePressed: () {},
+                            onMorePressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => AllNewsView(
+                                        data:
+                                            BlocProvider.of<GetHomeDataCubit>(
+                                              context,
+                                            ).data["articals"],
+                                      ),
+                                ),
+                              );
+                            },
                           ),
                           const SizedBox(height: 12),
                           _buildFeaturedArticles(),
@@ -338,14 +352,15 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: data.length,
+      itemCount: 5,
       itemBuilder: (context, index) {
-        return AnimatedArticleCard(
-          index: index,
-          category: 'تكنولوجيا',
-          readTime: '${index + 3} دقائق',
-          onTap: () {},
-          newsModel: NewsModel.fromJson(json: data[index]),
+        return InkWell(
+          child: AnimatedArticleCard(
+            index: index,
+            readTime: '${index + 3} دقائق',
+            onTap: () {},
+            newsModel: NewsModel.fromJson(json: data[index]),
+          ),
         );
       },
     );

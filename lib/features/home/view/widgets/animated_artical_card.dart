@@ -1,20 +1,19 @@
 import 'package:el_etehad/core/paths/images_paths.dart';
 import 'package:el_etehad/features/home/models/news_model.dart';
 import 'package:el_etehad/features/home/view/widgets/card_footer.dart';
+import 'package:el_etehad/features/news/view/new_details.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class AnimatedArticleCard extends StatefulWidget {
   final NewsModel newsModel;
   final int index;
-  final String category;
   final String readTime;
   final VoidCallback? onTap;
 
   const AnimatedArticleCard({
     super.key,
     required this.index,
-    required this.category,
     required this.readTime,
     this.onTap,
     required this.newsModel,
@@ -74,7 +73,14 @@ class _AnimatedArticleCardState extends State<AnimatedArticleCard>
             color: Colors.transparent,
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
-              onTap: widget.onTap,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NewDetails(id: widget.newsModel.id!),
+                  ),
+                );
+              },
               child: Padding(
                 padding: const EdgeInsets.all(0),
                 child: Row(
@@ -120,12 +126,14 @@ class _AnimatedArticleCardState extends State<AnimatedArticleCard>
                                   width: 20,
                                 ),
                                 Gap(5),
-                                Text(
-                                  "السياسه",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                Expanded(
+                                  child: Text(
+                                    widget.newsModel.category ?? 'القسم',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ],
