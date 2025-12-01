@@ -2,7 +2,7 @@ import 'package:el_etehad/core/paths/apis.dart';
 import 'package:el_etehad/core/paths/images_paths.dart';
 import 'package:el_etehad/features/home/models/news_model.dart';
 import 'package:el_etehad/features/home/view/widgets/card_footer.dart';
-import 'package:el_etehad/features/news/manager/cubit/get_news_details_cubit.dart';
+import 'package:el_etehad/features/news/manager/getNewsDetails/get_news_details_cubit.dart';
 import 'package:el_etehad/features/news/view/new_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

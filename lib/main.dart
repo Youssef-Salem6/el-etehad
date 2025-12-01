@@ -2,7 +2,8 @@ import 'package:el_etehad/core/manager/changeThemeCubit/change_theme_cubit.dart'
 import 'package:el_etehad/core/themes/appTheme.dart';
 import 'package:el_etehad/core/view/nav_view.dart';
 import 'package:el_etehad/features/home/manager/homeData/get_home_data_cubit.dart';
-import 'package:el_etehad/features/news/manager/cubit/get_news_details_cubit.dart';
+import 'package:el_etehad/features/news/manager/getNewsDetails/get_news_details_cubit.dart';
+import 'package:el_etehad/features/news/manager/toggleLike/toggle_like_cubit.dart';
 import 'package:el_etehad/features/polls/manager/cubit/get_all_polls_cubit.dart';
 import 'package:el_etehad/features/search/manager/artical_search/artical_search_cubit.dart';
 import 'package:el_etehad/features/services/manager/currentCubit/get_current_cubit.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => GetNewsDetailsCubit()),
         BlocProvider(create: (context) => GetAllPollsCubit()),
         BlocProvider(create: (context) => ArticalSearchCubit()),
+        BlocProvider(create: (context) => ToggleLikeCubit()),
       ],
       child: BlocBuilder<ChangeThemeCubit, ChangeThemeState>(
         builder: (context, state) {

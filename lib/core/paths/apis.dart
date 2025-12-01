@@ -13,4 +13,3 @@ String getAllPollsUrl = "$endPoint/votes";
 
 //search artical
 String searchArticalUrl = "$endPoint/articles?search";
-

@@ -1,4 +1,4 @@
-import 'package:el_etehad/features/news/manager/cubit/get_news_details_cubit.dart';
+import 'package:el_etehad/features/news/manager/getNewsDetails/get_news_details_cubit.dart';
 import 'package:el_etehad/features/news/view/widgets/bottom_actions.dart';
 import 'package:el_etehad/features/news/view/widgets/news_app_bar.dart';
 import 'package:el_etehad/features/news/view/widgets/news_content.dart';
@@ -236,7 +236,8 @@ class _NewDetailsState extends State<NewDetails> with TickerProviderStateMixin {
             builder: (context, state) {
               // Only show bottom actions when success
               if (state is GetNewsDetailsSuccess) {
-                return BottomActions(theme: theme);
+                final newsDetailsModel = state.newsDetailsModel;
+                return BottomActions(theme: theme, id: newsDetailsModel.id!);
               }
               return const SizedBox.shrink();
             },
