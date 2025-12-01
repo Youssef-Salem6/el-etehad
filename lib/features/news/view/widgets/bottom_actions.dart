@@ -1,4 +1,6 @@
+
 import 'package:el_etehad/features/news/manager/toggleLike/toggle_like_cubit.dart';
+import 'package:el_etehad/features/comments/view/comments_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -100,7 +102,9 @@ class _BottomActionsState extends State<BottomActions> {
               _buildActionButton(
                 icon: Icons.comment_outlined,
                 label: '89',
-                onTap: () {},
+                onTap: () {
+                  CommentsView.show(context, newsId: widget.id);
+                },
                 theme: widget.theme,
               ),
               _buildActionButton(

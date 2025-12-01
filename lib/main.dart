@@ -1,6 +1,7 @@
 import 'package:el_etehad/core/manager/changeThemeCubit/change_theme_cubit.dart';
 import 'package:el_etehad/core/themes/appTheme.dart';
 import 'package:el_etehad/core/view/nav_view.dart';
+import 'package:el_etehad/features/comments/manager/getComments/get_all_comments_cubit.dart';
 import 'package:el_etehad/features/home/manager/homeData/get_home_data_cubit.dart';
 import 'package:el_etehad/features/news/manager/getNewsDetails/get_news_details_cubit.dart';
 import 'package:el_etehad/features/news/manager/toggleLike/toggle_like_cubit.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => GetAllPollsCubit()),
         BlocProvider(create: (context) => ArticalSearchCubit()),
         BlocProvider(create: (context) => ToggleLikeCubit()),
+        BlocProvider(create: (context) => GetAllCommentsCubit()),
       ],
       child: BlocBuilder<ChangeThemeCubit, ChangeThemeState>(
         builder: (context, state) {
