@@ -1,3 +1,4 @@
+import 'package:el_etehad/features/comments/manager/add_comment/add_comment_cubit.dart';
 import 'package:el_etehad/features/comments/manager/getComments/get_all_comments_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +14,11 @@ class CommentsView extends StatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => CommentsView(newsId: newsId),
+      builder:
+          (context) => BlocProvider(
+            create: (context) => AddCommentCubit(),
+            child: CommentsView(newsId: newsId),
+          ),
     );
   }
 
@@ -27,10 +32,10 @@ class _CommentsViewState extends State<CommentsView> {
 
   @override
   void initState() {
+    super.initState();
     BlocProvider.of<GetAllCommentsCubit>(
       context,
     ).getComments(articalId: widget.newsId);
-    super.initState();
   }
 
   @override
@@ -293,65 +298,118 @@ class _CommentsViewState extends State<CommentsView> {
   }
 
   Widget _buildCommentInput(ThemeData theme) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
+    return BlocListener<AddCommentCubit, AddCommentState>(
+      listener: (context, state) {
+        if (state is AddCommentSuccess) {
+          _commentController.clear();
+          _focusNode.unfocus();
+          // Refresh comments after successful addition
+          BlocProvider.of<GetAllCommentsCubit>(
+            context,
+          ).getComments(articalId: widget.newsId);
+
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('تم إضافة التعليق بنجاح'),
+              backgroundColor: Colors.green[400],
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        } else if (state is AddCommentFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red[400],
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      },
+      child: Padding(
         padding: EdgeInsets.only(
-          left: 16,
-          right: 16,
-          top: 12,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 12,
+          bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _commentController,
-                focusNode: _focusNode,
-                textDirection: TextDirection.rtl,
-                decoration: InputDecoration(
-                  hintText: 'اكتب تعليقك...',
-                  hintStyle: TextStyle(color: Colors.grey[400]),
-                  filled: true,
-                  fillColor: theme.cardColor,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
-                    borderSide: BorderSide.none,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
-                    borderSide: BorderSide(
-                      color: theme.primaryColor.withOpacity(0.3),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _commentController,
+                  focusNode: _focusNode,
+                  textDirection: TextDirection.rtl,
+                  decoration: InputDecoration(
+                    hintText: 'اكتب تعليقك...',
+                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    filled: true,
+                    fillColor: theme.cardColor,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide(
+                        color: theme.primaryColor.withOpacity(0.3),
+                      ),
                     ),
                   ),
+                  maxLines: null,
+                  textInputAction: TextInputAction.newline,
                 ),
-                maxLines: null,
-                textInputAction: TextInputAction.newline,
               ),
-            ),
-            const SizedBox(width: 8),
-            Container(
-              decoration: BoxDecoration(
-                color: theme.primaryColor,
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                onPressed: () {
-                  if (_commentController.text.trim().isNotEmpty) {
-                    // TODO: Send comment using BLoC/Cubit
-                    print('Sending comment: ${_commentController.text}');
-                    _commentController.clear();
-                    _focusNode.unfocus();
-                  }
+              const SizedBox(width: 8),
+              BlocBuilder<AddCommentCubit, AddCommentState>(
+                builder: (context, state) {
+                  final isLoading = state is AddCommentLoading;
+
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: theme.primaryColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      onPressed:
+                          isLoading
+                              ? null
+                              : () {
+                                if (_commentController.text.trim().isNotEmpty) {
+                                  BlocProvider.of<AddCommentCubit>(
+                                    context,
+                                  ).addComment(
+                                    articalId: widget.newsId.toString(),
+                                    comment: _commentController.text.trim(),
+                                  );
+                                }
+                              },
+                      icon:
+                          isLoading
+                              ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              )
+                              : const Icon(
+                                Icons.send,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                    ),
+                  );
                 },
-                icon: const Icon(Icons.send, color: Colors.white, size: 20),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
